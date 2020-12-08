@@ -10,7 +10,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 //********************* <<Setup Database>>*********************//
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const DbUrl = require("./config/DB");
 mongoose.set('useCreateIndex', true);
 mongoose.connect(DbUrl, {

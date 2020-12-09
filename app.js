@@ -9,6 +9,8 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+//********************* <<setup to access public folder>> *********************//
+app.use(express.static(path.join(__dirname, 'public')));
 
 //********************* <<Setup body parser middleware>> *********************//
 const bodyParser = require('body-parser');

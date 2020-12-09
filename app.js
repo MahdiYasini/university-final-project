@@ -3,13 +3,29 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 const session = require('express-session');
 const cookieSession = require('cookie-session');
+const cookieKey = require('./config/Key');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+//********************* <<setup cookie and session>> *********************//
+app.use(cookieSession({
+  maxAge: 24 * 60 * 1000,
+  keys: [cookieKey.key]
+}));
+
+// Express Session
+app.use(session({
+  secret: "secret",
+  resave: true,
+  saveUninitialized: true,
+}));
+//********************* //
 
 //********************* <<setup to access public folder>> *********************//
 app.use(express.static(path.join(__dirname, 'public')));

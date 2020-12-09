@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const flash = require('connect-flash');
+
 const session = require('express-session');
 const cookieSession = require('cookie-session');
 const cookieKey = require('./config/Key');
@@ -62,6 +64,19 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+//********************* //
+
+//********************* <<setup flash>> *********************//
+// Connect Flash
+app.use(flash());
+
+// Globals Vars
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
 //********************* //
 
 //********************* <<Routes>> *********************//

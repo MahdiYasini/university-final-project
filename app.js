@@ -9,7 +9,13 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-//********************* <<Setup Database>>*********************//
+
+//********************* <<Setup body parser middleware>> *********************//
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json()) 
+
+//********************* <<Setup Database>> *********************//
 const mongoose = require('mongoose');
 const DbUrl = require("./config/DB");
 mongoose.set('useCreateIndex', true);
@@ -23,6 +29,9 @@ mongoose.connect(DbUrl, {
       next(err);
     });
 //********************* //
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

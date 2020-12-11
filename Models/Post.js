@@ -19,7 +19,7 @@ const PostSchema = new mongoose.Schema({
         default: '/images/postImages/defaultIamge'
     },
     author: {
-        type: Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
     }
 },

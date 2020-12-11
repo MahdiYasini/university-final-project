@@ -14,13 +14,13 @@ const UserSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
-        default: '/images/profileImages/defaultIamge'
+        default: '/images/profileImages/defaultImage'
     },
     description: {
         type: String,
         default: "یه ماجرا جو"
     },
-    lastAcitivity: {
+    lastActivity: {
         type : Date, 
         default: Date.now
     },

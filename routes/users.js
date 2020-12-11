@@ -55,6 +55,22 @@ let uploadArticleImage = multer({
   }
 });
 //********************* //
+
+
+//********************* <<Hanlde Registering request >> *********************//
+// Register Page request
+router.get("/register", (req, res) => {
+  if (req.user) {
+    //When user logged in.
+    res.redirect("dashboard");
+  } else {
+    res.render("register");
+  }
+});
+
+//Register request
+
+//********************* //
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   req.flash("success_msg", "شما ثبت نام کردید و میتوانید وارد شوید");

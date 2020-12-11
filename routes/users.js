@@ -2,7 +2,8 @@
 var express = require('express');
 var router = express.Router();
 
-
+const User = require('../Models/User');
+const Post = require('../Models/Post');
 
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");

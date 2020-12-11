@@ -1,3 +1,4 @@
+<!-- Unusual Error message -->
 <% if(typeof errors != 'undefined') {%> <% errors.forEach(function(error){ %>
 <div
   class="alert alert-warning alert-dismissible fade show text-center"
@@ -8,7 +9,11 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<% }); %> <% } %> <% if(success_msg != ''){ %>
+<% }); %>
+<!--  -->
+
+<!-- Success message -->
+<% } %> <% if(success_msg != ''){ %>
 <div
   class="alert alert-success alert-dismissible fade show text-center"
   role="alert"
@@ -18,7 +23,11 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<% } %> <% if(error_msg != ''){ %>
+<% } %>
+<!--  -->
+
+<!-- Error message -->
+<% if(error_msg != ''){ %>
 <div
   class="alert alert-warning alert-dismissible fade show text-center"
   role="alert"
@@ -28,7 +37,11 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<% } %> <% if(error!= ''){ %>
+<% } %> 
+<!--  -->
+
+<!-- NI (For sure) -->
+<% if(error!= ''){ %>
 <div
   class="alert alert-warning alert-dismissible fade show text-center"
   role="alert"
@@ -39,3 +52,4 @@
   </button>
 </div>
 <% } %>
+<!--  -->

@@ -207,7 +207,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
 //********************* <<Handle Login request >> *********************//
 //**** Login Page request
 router.get("/login", (req, res) => {
-  if(req.user){
+  if (req.user) {
     res.redirect('dashboard')
   }
   else res.render("login");
@@ -219,10 +219,8 @@ router.post("/login", (req, res, next) => {
     successRedirect: "/dashboard",
     failureRedirect: "/login",
     failureFlash: true
-  })(req,res, next);
+  })(req, res, next);
 });
-
-
 //********************* //
 
 
@@ -230,8 +228,6 @@ router.post("/login", (req, res, next) => {
 router.get('/', function (req, res, next) {
   req.flash("success_msg", "شما ثبت نام کردید و میتوانید وارد شوید");
   res.redirect("/");
-
-
 });
 
 module.exports = router;

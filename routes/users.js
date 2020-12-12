@@ -15,6 +15,7 @@ const passport = require('passport');
 const multer = require("multer");
 const { exit } = require('process');
 const { render } = require('ejs');
+const { ESRCH } = require('constants');
 
 // For save profile image.
 let uploadProfileImage = multer({
@@ -223,6 +224,14 @@ router.post("/login", (req, res, next) => {
 });
 //********************* //
 
+//********************* <<Handle logout request >> *********************//
+router.get("/logout", (req, res) => {
+  req.logout();
+  req.flash("success_msg", "با موفقیت خارج شدید به امید دیدار");
+  res.clearCookie("session");
+  res.redirect("/");
+});
+//********************* //
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {

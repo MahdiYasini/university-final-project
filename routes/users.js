@@ -12,6 +12,7 @@ const Post = require('../Models/Post');
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
 const { exit } = require('process');
+const { render } = require('ejs');
 // For save profile image.
 let uploadProfileImage = multer({
   storage: multer.diskStorage({
@@ -82,7 +83,7 @@ router.get("/register", (req, res) => {
 });
 
 //**** Register request handle
-router.post("/register", uploadProfileImage.single("profilePicture"), (req, res) => {
+router.post("/register", uploadProfileImage.single("profilePicture"), (req, res, next) => {
   const {
     userName,
     email,
@@ -198,6 +199,16 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res)
     );
   }
 });
+//********************* //
+
+//********************* <<Handle Login request >> *********************//
+//**** Login Page request
+router.get("/login", (req, res) => {
+  res.render("login");
+});
+
+
+
 //********************* //
 
 

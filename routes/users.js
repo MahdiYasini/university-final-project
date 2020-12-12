@@ -233,6 +233,7 @@ router.get("/logout", (req, res) => {
 });
 //********************* //
 
+
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   req.flash("success_msg", "شما ثبت نام کردید و میتوانید وارد شوید");

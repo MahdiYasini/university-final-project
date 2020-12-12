@@ -15,18 +15,28 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+const passport = require('passport');
+
+
 //********************* <<setup cookie and session>> *********************//
 app.use(cookieSession({
   maxAge: 24 * 60 * 1000,
   keys: [cookieKey.key]
 }));
 
-// Express Session
+//**** Express Session
 app.use(session({
   secret: "secret",
   resave: true,
   saveUninitialized: true,
 }));
+//********************* //
+
+//********************* <<setup Passport>> *********************//
+//! We have to setup passport code below the code to set user information (req.user) correctly.
+require('./config/passport')(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 //********************* //
 
 //********************* <<setup to access public folder>> *********************//
@@ -100,5 +110,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 //********************* //
+
 
 module.exports = app;

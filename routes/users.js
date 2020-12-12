@@ -9,10 +9,13 @@ const bcrypt = require("bcryptjs");
 const User = require('../Models/User');
 const Post = require('../Models/Post');
 
+const passport = require('passport');
+
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
 const { exit } = require('process');
 const { render } = require('ejs');
+
 // For save profile image.
 let uploadProfileImage = multer({
   storage: multer.diskStorage({
@@ -74,8 +77,8 @@ let uploadArticleImage = multer({
 //********************* <<Handle Registering request >> *********************//
 //**** Register Page request
 router.get("/register", (req, res) => {
+  console.log('req.user :>> ', req.user);
   if (req.user) {
-    //When user logged in.
     res.redirect("dashboard");
   } else {
     res.render("register");
@@ -204,9 +207,20 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
 //********************* <<Handle Login request >> *********************//
 //**** Login Page request
 router.get("/login", (req, res) => {
-  res.render("login");
+  if(req.user){
+    res.redirect('dashboard')
+  }
+  else res.render("login");
 });
 
+//**** Login request handle
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/login",
+    failureFlash: true
+  })(req,res, next);
+});
 
 
 //********************* //

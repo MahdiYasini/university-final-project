@@ -46,4 +46,24 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
 
 )
 
+
+//********************* <<Handle Login request >> *********************//
+//**** Login Page request
+router.get("/login", (req, res) => {
+    if (req.user) {
+      res.redirect('dashboard')
+    }
+    else res.render("login");
+  });
+  
+  //**** Login request handle
+  router.post("/login", (req, res, next) => {
+    passport.authenticate("local", {
+      successRedirect: "/dashboard",
+      failureRedirect: "/login",
+      failureFlash: true
+    })(req, res, next);
+  });
+  //********************* //
+
 module.exports = router;

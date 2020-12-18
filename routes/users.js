@@ -46,6 +46,7 @@ router.get("/logout", (req, res) => {
 //********************* <<Handle Dashboard request >> *********************//
 //! کد داشبورد برای پیدا کردن نام نویسنده های پست باید بهینه بشه 
 //! نیاز به اصلاح داره 
+//! باید یه پست ایجاد کنی تا بتونی تغییرات رو انجام بدی
 router.get('/dashboard',  (req, res) =>
     Post.find({})
     .then((blogPost) => {
@@ -70,6 +71,9 @@ router.get('/dashboard',  (req, res) =>
     })
     .catch(err => console.log(err))
 )
+
+
+
 
 
 /* GET users listing. */

@@ -16,7 +16,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 const passport = require('passport');
-
+const { ensureAuthenticated } = require('./config/auth');
 
 //********************* <<setup cookie and session>> *********************//
 app.use(cookieSession({
@@ -91,7 +91,7 @@ app.use((req, res, next) => {
 
 //********************* <<Routes>> *********************//
 app.use('/', indexRouter);
-app.use('/', usersRouter);
+app.use('/',ensureAuthenticated, usersRouter);
 //********************* //
 
 //********************* <<catch 404 and forward to error handler>> *********************//

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/editProfile.css">
+    <title>ویرایش اطلاعات</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">ویرایش اطلاعات دفترچه</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/addArticle">افزودن خاطره</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/myArticles">خاطره‌های من</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="/dashboard">سفرنامه</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <% include ./partials/messages %>
+        <div class="mt-5 card ">
+            <div class="jumbotron">
+                <form 
+                    action="/editProfile" 
+                    method="POST" 
+                    enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                          <div class="custom-file">
+                            <input
+                              type="file"
+                              name="profilePicture"
+                              class="custom-file-input"
+                              id="inputGroupFile02"
+                              accept="application/x-zip-compressed,image/*"
+                            />
+                            <label
+                              class="custom-file-label text-center"
+                              for="inputGroupFile02"
+                              >عکس کاربری</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    <div class="form-group">
+                        <label for="userName">نام کاربری</label>
+                        <input type="name" id="usreName" name="userNameChange" class="form-control"
+                            placeholder=" <%= userInformation.userName %>"
+                            value="<%= typeof userName != 'undefined' ? userName : '' %>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">رایانامه</label>
+                        <input type="email" id="email" name="emailChange" class="form-control"
+                            placeholder="<%= userInformation.email %>"
+                            value="<%= typeof email != 'undefined' ? email : '' %>" />
+                    </div>
+                    <div class="form-group" id='changePasswordDiv'>
+                        <label for="password">رمز عبور</label>
+                        <input type="password" id="password" class="form-control" placeholder="*****************"
+                            value="<%= typeof password != 'undefined' ? password : '' %>" disabled />
+                        <div class="form-group text-center m-3">
+                            <button type="button" class="btn btn-primary" id="changePassword">تغییر رمز عبور</button>
+                        </div>
+                    </div>
+                    <div class="form-group" id="changePasswordInput">
+                        <label for="oldPassword">رمز قدیمی</label>
+                        <input type="password" id="oldPassword" name="oldPassword" class="form-control"
+                            placeholder="*****************"
+                            value="<%= typeof password != 'undefined' ? password : '' %>" />
+                        <label for="newPassword">رمز جدید</label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-control"
+                            placeholder="*****************"
+                            value="<%= typeof password != 'undefined' ? password : '' %>" />
+                        <label for="confrimNewPassword">تکرار رمز جدید </label>
+                        <input type="password" id="confrimNewPassword" name="confirmNewPassword" class="form-control"
+                            placeholder="*****************"
+                            value="<%= typeof password != 'undefined' ? password : '' %>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="commentArea">توضیحی در مورد خودم</label>
+                        <input class="form-control" id="commentArea" name="commentChange" type="text"
+                            placeholder="<%= userInformation.description %>">
+                    </div>
+                    <div class="form-group text-center mx-auto ">
+                        <a href="/dashboard" class="btn btn-danger mr-5 px-4">منصرف شدم</a>
+                        <button type="submit" class="btn btn-primary ml-3  px-4">اطلاعاتم تغییر کنند</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
+    <script src="javascripts/editProfile.js"></script>
+</body>
+
+</html>

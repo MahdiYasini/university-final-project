@@ -63,7 +63,6 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
     email,
     password,
     password2,
-    description
   } = req.body;
 
   //Define for add probable errors.
@@ -145,20 +144,21 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
       userName,
       email,
       password,
-      description
     });
 
     // If user upload profile picture
     if (req.file) {
-      newUser.image = "/uploads/profile/" + req.file.filename;
+      newUser.profileImage = "/uploads/profile/" + req.file.filename;
     }
-    if (description) {
-      newUser.description = description;
+
+    // If user has own description
+    if (req.body.description) {
+      newUser.description = req.body.description
     }
 
     // Hashing password
     bcrypt.genSalt(10, (err, salt) =>
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
+      bcrypt.hash(password, salt, (err, hash) => {
         if (err) throw err;
         newUser.password = hash;
         //Save user to DB.

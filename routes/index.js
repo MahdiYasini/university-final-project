@@ -25,7 +25,6 @@ let uploadProfileImage = multer({
     }
   }),
   fileFilter: function (req, file, callback) {
-    console.log('file :>> ', file);
     //! The below code didn't work, I don't know why.
     // if (path.extname(file.originalname) !== ".png" && ".jpeg" && ".jpg" && ".gif")
     if (
@@ -148,7 +147,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
 
     // If user upload profile picture
     if (req.file) {
-      newUser.profileImage = "/uploads/profile/" + req.file.filename;
+      newUser.profileImage = "/images/profileImages/" + req.file.filename;
     }
 
     // If user has own description

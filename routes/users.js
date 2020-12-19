@@ -11,6 +11,41 @@ const bcrypt = require("bcryptjs");
 
 const fs = require('fs');
 
+//********************* <<Functions>> *********************//
+const checkExistEmail = async (email) => {
+  console.log('emailChange :>> ', email);
+  const user = await User.findOne({ email: email }, { email: 1 })
+  if (user) return 1;
+  else return 0;
+};
+
+//? await doesn't wait for bcrypt.hash or bcrypt.compare because bcrypt.hash does not return a promise. 
+//? So we will use bcrypt in a promise in order to use await.
+//** Compare old and new password */
+function compareAsync(oldPassword, newPassword) {
+  return new Promise(function (resolve, reject) {
+    bcrypt.compare(oldPassword, newPassword, function (err, res) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+}
+
+//** Hashing new password */
+async function hashPassword(newPasswordSendForHashing) {
+  const hashedPassword = await new Promise((resolve, reject) => {
+    bcrypt.hash(newPasswordSendForHashing, 10, function (err, hash) {
+      if (err) reject(err)
+      resolve(hash)
+    });
+  })
+  return hashedPassword
+}
+//********************* //
+
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
 // For save profile image.
@@ -18,7 +53,6 @@ let uploadProfileImage = multer({
   storage: multer.diskStorage({
     destination: function (req, file, callback) {
       callback(null, "public/images/profileImages");
-      console.log("tst");
     },
     filename: function (req, file, callback) {
       callback(
@@ -28,7 +62,6 @@ let uploadProfileImage = multer({
     }
   }),
   fileFilter: function (req, file, callback) {
-    console.log('file :>> ', file);
     //! The below code didn't work, I don't know why.
     // if (path.extname(file.originalname) !== ".png" && ".jpeg" && ".jpg" && ".gif")
     if (
@@ -119,46 +152,6 @@ router.get('/editProfile', (req, res) => {
 });
 
 //**** Edit profile page request
-
-const checkExistEmail = async (email) => {
-  console.log('emailChange :>> ', email);
-  const user = await User.findOne({ email: email }, { email: 1 })
-  if (user) return 1;
-  else return 0;
-};
-
-//? await doesn't wait for bcrypt.hash because bcrypt.hash does not return a promise. 
-//? So we will use bcrypt in a promise in order to use await.
-
-//** Compare old and new password */
-function compareAsync(oldPassword, newPassword) {
-  return new Promise(function (resolve, reject) {
-    bcrypt.compare(oldPassword, newPassword, function (err, res) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
-}
-
-//** Hashing new password */
-async function hashPassword(newPasswordSendForHashing) {
-  const hashedPassword = await new Promise((resolve, reject) => {
-    bcrypt.hash(newPasswordSendForHashing, 10, function (err, hash) {
-      if (err) reject(err)
-      resolve(hash)
-    });
-  })
-  return hashedPassword
-}
-
-
-
-//! مشکل تو فایل rjdعه 
-//! یادت باشه عکسش هنوز مونده
-//! حذف عکس قبلی یادت نره
 router.post('/editProfile', uploadProfileImage.single("profilePicture"), (req, res, next) => {
   User.findOne({
     _id: req.user._id
@@ -207,19 +200,22 @@ router.post('/editProfile', uploadProfileImage.single("profilePicture"), (req, r
       }
       //? Change Profile picture
       if(req.file){
-        console.log('req.body.file :>> ', req.file);
-        // fs.unlinkSync('/tmp/hello');
+        if(user.profileImage != "/images/profileImages/defaultImage/profile.png") {
+            fs.unlinkSync("./public" + user.profileImage);
+            user.profileImage = "/images/profileImages" + req.file.filename;
+        }
+        else {
+          user.profileImage =  "/images/profileImages" + req.file.filename;
+        }
+        req.flash("success_msg", "تغییرات با موفقیت اعمال شد");
       }
-
-      user.save()
-      // console.log('user ::::::::::>> \n ', user);
+      user.save();
     })
     .then(() => {
       res.redirect('/editProfile');
     })
     .catch(err => console.log(err));
-
-})
+});
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {

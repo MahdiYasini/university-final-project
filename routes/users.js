@@ -225,7 +225,6 @@ router.get("/myArticles", (req, res) => {
   }).then(posts => {
     let checkExistPost = 0;
     if(posts.length == 0) checkExistPost = 1;
-    
     //! بعد از اینکه پست اضافه کردی حواست باشه برای نشون دادن زمان پست به صورت شمسی باید کد های زیر رو اعمال کنیم 
     // for (var data in posts) {
     //   //Set Hour
@@ -251,12 +250,22 @@ router.get("/myArticles", (req, res) => {
     //   posts[data]["time"] = `${setHour}:${setMinute}:${setSecond}`;
     //   posts[data]["dateCalender"] = moment(`${posts[data].date.getFullYear()}/${posts[data].date.getMonth()}/${posts[data].date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
     // }
-
     res.render("myArticles", {
       blogPost: posts,
       checkExistPost: checkExistPost
     });
   });
+});
+//********************* //
+
+
+//********************* << Add Article Handle >> *********************//
+//**** Add Article Page request
+router.get("/addArticle", (req, res) => {
+  if (!req.user) {
+    res.redirect("/login");
+  }
+  res.render("addArticle");
 });
 //********************* //
 

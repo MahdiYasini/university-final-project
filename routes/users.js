@@ -165,7 +165,7 @@ router.post('/editProfile', uploadProfileImage.single("profilePicture"), (req, r
   })
     .then(async (user) => {
       //? Change username
-      if (req.body.userNameChange && user.userNameChange != req.body.userNameChange) {
+      if (req.body.userNameChange && user.userName!= req.body.userNameChange) {
         user.userName = req.body.userNameChange
         req.flash("success_msg", "تغییرات با موفقیت اعمال شد");
       }

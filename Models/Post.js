@@ -16,7 +16,11 @@ const PostSchema = new mongoose.Schema({
     image: {
         type: String,
         required: true,
-        default: '/images/postImages/defaultIamge'
+        default: '/images/postImages/defaultImage/defaultImage.jpg'
+    },
+    keyArticles: {
+        type: Array,
+        default: ["سفر"]
     },
     author: {
         type: mongoose.Schema.Types.ObjectId, 

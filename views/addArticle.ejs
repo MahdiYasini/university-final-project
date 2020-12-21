@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/addArticle.css">
+    <link rel="icon" href="/images/general/favicon-16x16.png" type="image/gif" sizes="16x16">
     <title>افزودن مقاله</title>
 </head>
 
@@ -43,15 +44,25 @@
         <div class="mt-5 card ">
             <% include ./partials/messages %>
             <div class="card-body">
-                <form action="/addArticle" method="POST" enctype="multipart/form-data">
+                <form 
+                    action="/addArticle" 
+                    method="POST"
+                    enctype="multipart/form-data">
                     <div class="form-group">
                         <div class="input-group mb-3">
                             <div class="custom-file">
-                                <input type="file" name="postPicture" class="custom-file-input" id="inputGroupFile02"
-                                    accept="application/x-zip-compressed,image/*">
-                                <label class="custom-file-label text-center" for="inputGroupFile02" name="postPicture">عکسی
-                                    برای مقاله
-                                    تعیین کنید</label>
+                                <input
+                                type="file"
+                                name="postImage"
+                                class="custom-file-input"
+                                id="inputGroupFile02"
+                                accept="application/x-zip-compressed,image/*"
+                              />
+                              <label
+                                class="custom-file-label text-center"
+                                for="inputGroupFile02"
+                                >عکس مقاله</label
+                              >
                             </div>
                         </div>
                     </div>
@@ -62,66 +73,19 @@
                     </div>
                     <div class="form-group">
                         <label for="summaryArea">خلاصه‌ای از مقاله‌ی خود بنویسید*</label>
-                        <textarea dir="rtl" name="summery" class="form-control" id="summaryArea" placeholder="برگی از مقاله‌ام"></textarea>
+                        <textarea dir="rtl" name="summery" class="form-control" id="summaryArea"
+                            placeholder="برگی از مقاله‌ام"></textarea>
                     </div>
                     <div class="form-group ">
                         <label for="articleArea">مقاله را در این قسمت بنویسید*</label>
-                        <textarea dir="rtl" rows="19" name="article" class="form-control" id="articleArea" placeholder="می‌نویسم هرآنچه را که از دلم فوران می‌کند"></textarea>
+                        <textarea dir="rtl" rows="19" name="article" class="form-control" id="articleArea"
+                            placeholder="می‌نویسم هرآنچه را که از دلم فوران می‌کند"></textarea>
                     </div>
                     <div class="form-group">
 
-                        <label for="articleArea">کلید واژه ‌های مقاله خود را بنویسید*</label>
-                        <textarea dir="rtl" name="articleKeys" class="form-control" id="articleArea" placeholder="کلید واژه‌ها را با فاصله از هم جدا کنید."></textarea>
-
-
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-6">
-                            <label for="inputlg">شهر یا منطقه‌ای که به آن سفر کردید؟</label>
-                            <input class="form-control" id="inputlg" name="city" type="text">
-                        </div>
-                        <div class="col-6" id="divProvince">
-                            <label for="selectProvince">به چه استانی سفر کردید؟</label>
-                            <select class="custom-select mr-sm-2" id="selectProvince" name="province">
-                                <option selected>کجا؟</option>
-                                <option value="outOfTheCountry">بلاد خارج</option>
-                                <option value="آذربایجان شرقی">آذربایجان شرقی</option>
-                                <option value="آذربایجان غربی">آذربایجان غربی</option>
-                                <option value="اردبیل">اردبیل</option>
-                                <option value="اصفهان">اصفهان</option>
-                                <option value="البرز">البرز</option>
-                                <option value="ایلام">ایلام</option>
-                                <option value="بوشهر">بوشهر</option>
-                                <option value="تهران">تهران</option>
-                                <option value="چهارمحال و بختیاری">چهارمحال و بختیاری</option>
-                                <option value="خراسان جنوبی">خراسان جنوبی</option>
-                                <option value="خراسان رضوی">خراسان رضوی</option>
-                                <option value="خراسان شمالی">خراسان شمالی</option>
-                                <option value="خوزستان">خوزستان</option>
-                                <option value="زنجان">زنجان</option>
-                                <option value="سمنان">سمنان</option>
-                                <option value="سیستان و بلوچستان">سیستان و بلوچستان</option>
-                                <option value="فارس">فارس</option>
-                                <option value="قزوین">قزوین</option>
-                                <option value="قم">قم</option>
-                                <option value="کردستان">کردستان</option>
-                                <option value="کرمان">کرمان</option>
-                                <option value="کرمانشاه">کرمانشاه</option>
-                                <option value="کهکیلویه و بویراحمد">کهکیلویه و بویراحمد</option>
-                                <option value="گلستان">گلستان</option>
-                                <option value="گیلان">گیلان</option>
-                                <option value="لرستان">لرستان</option>
-                                <option value="مازندران">مازندران</option>
-                                <option value="مرکزی">مرکزی</option>
-                                <option value="هرمزگان">هرمزگان</option>
-                                <option value="همدان">همدان</option>
-                                <option value="یزد">یزد</option>
-                            </select>
-                        </div>
-                        <div class="col-6" id="country">
-                            <label for="inputlg">کشوری که به آن سفر کردید؟</label>
-                            <input class="form-control" id="inputlg" name="country" type="text">
-                        </div>
+                        <label for="articleArea">کلید واژه ‌های مقاله خود را بنویسید</label>
+                        <textarea dir="rtl" name="articleKeys" class="form-control" id="articleArea"
+                            placeholder="کلید واژه‌ها را با فاصله از هم جدا کنید."></textarea>
                     </div>
                     <div class="form-group text-center">
                         <a href="/dashboard" class="btn btn-danger mr-5 px-4">منصرف شدم</a>
@@ -135,11 +99,12 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-        crossorigin="anonymous"></script>
-    <script src="/javascript/addArticle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

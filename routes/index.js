@@ -200,7 +200,58 @@ router.post("/login", (req, res, next) => {
 //********************* //
 
 
+//********************* << Article Page Handle >> *********************//
+// TODO Need to check and improve
+router.get("/article/:id", (req, res) => {
+  let postKey = [];
+  let variable = 0;
 
+  for (let i = 0; req.path[i] != null; i++) {
+    if (req.path[i] === "/") {
+      variable++;
+    }
+    if (variable === 2) {
+      if (req.path[i] != "/") {
+        postKey.push(req.path[i]);
+      }
+    }
+  }
+
+  postKey = postKey.join("");
+  Post.findOne({
+    _id: postKey
+  })
+    .then(post => {
+      // //Set Hour
+      // let setHour = post.date.getHours() - 3;
+      // if (setHour < 0) {
+      //   setHour += 24;
+      // }
+
+      // //Set Minute
+      // let setMinute = post.date.getMinutes() - 30;
+      // if (setMinute < 0) {
+      //   setMinute += 60;
+      //   setHour -= 1;
+      // }
+
+      // //Set Second
+      // let setSecond = post.date.getSeconds();
+      // if (setSecond < 0) {
+      //   setSecond += 60;
+      //   setMinute -= 1;
+      // }
+
+
+      // post.time = `${setHour}:${setMinute}:${setSecond}`;
+      // post.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${post.date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
+      res.render("article", {
+        blogPost: post
+      });
+    })
+    .catch(err => console.log(err));
+});
+//********************* //
 
 
 //! بعد از اینکه قسمت افزودن خاطره رو ایجاد کردی حتما چک کن حتما حتما

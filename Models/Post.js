@@ -18,7 +18,7 @@ const PostSchema = new mongoose.Schema({
         required: true,
         default: '/images/postImages/defaultImage/defaultImage.jpg'
     },
-    keyArticles: {
+    articleKeys: {
         type: Array,
         default: ["سفر"]
     },

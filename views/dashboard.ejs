@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="icon" href="/images/general/favicon-16x16.png" type="image/gif" sizes="16x16">
     <title>سفرنامه، دفترچه من</title>
 </head>
 
@@ -50,38 +51,36 @@
             </div>
         </div>
         <% } else { %> 
-            <% for(var data in blogPost){ %>
+            <% for(var post in posts){ %>
             <div class="mt-5 card ">
                 <div class="jumbotron">
                     <div class="text-center">
-                        <img src="<%= blogPost[data]['image'] %>" class="img-fluid" alt="عکسی از خاطرات زندگی">
+                        <img src="<%= posts[post]['image'] %>" class="img-fluid" alt="عکسی از خاطرات زندگی">
                     </div>
                     <div class="col-sm-8 mx-auto">
-                        <h1 class="col-4">
-                            <%= blogPost[data].subject %>
-                        </h1>
+                        <div class = "col-12 text-center">
+                            <h1 class="text-center">
+                                <%= posts[post].subject %>
+                            </h1>
+                        </div>
                         <div class="col 12 row">
                             <p> نوشته شده در تاریخ:</p>
                             <p class="mx-1">
-                                <%= blogPost[data].dateCalender%>
-                            </p>
-                            <p> - </p>
-                            <p class="mx-1">
-                                <%= blogPost[data].time%>
+                                <%= posts[post].time%>
                             </p>
                         </div>
                         <div class="col 12 row">
-                            <p> توسط: </p>
-                            <p class="mx-1">
-                                <%= blogPost[data].userName%>
-                            </p>
+                                <img src="<%= posts[post]['author'].profileImage %>" class="rounded-circle w-25 p-3" alt="Cinque Terre">
+                                <p class="p-5">
+                                    <%= posts[post]['author'].userName%>
+                                </p>
                         </div>
                         <div class="col 12 row">
                             <p>
-                                <%= blogPost[data].summery %>...</p>
+                                <%= posts[post].summery %>...</p>
                         </div>
                         <div class="text-center"> <a type="submit" class="btn btn-primary readMore"
-                                href="/article/<%= blogPost[data]._id %>" role="button">ادامه
+                                href="/article/<%= posts[post]._id %>" role="button">ادامه
                                 مطلب
                                 &raquo;</a>
                         </div>

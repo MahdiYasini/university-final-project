@@ -11,10 +11,16 @@ const bcrypt = require("bcryptjs");
 
 const fs = require('fs');
 
+const moment = require('jalali-moment');
+
+
 //********************* <<Functions>> *********************//
 const checkExistEmail = async (email) => {
-  console.log('emailChange :>> ', email);
-  const user = await User.findOne({ email: email }, { email: 1 })
+  const user = await User.findOne({
+    email: email
+  }, {
+    email: 1
+  })
   if (user) return 1;
   else return 0;
 };
@@ -93,7 +99,12 @@ let uploadArticleImage = multer({
     }
   }),
   fileFilter: function (req, file, callback) {
-    if (path.extname(file.originalname) !== ".png" && ".gif" && ".jpg" && ".jpeg") {
+    if (
+      path.extname(file.originalname) !== ".png" &&
+      path.extname(file.originalname) !== ".gif" &&
+      path.extname(file.originalname) !== ".jpg" &&
+      path.extname(file.originalname) !== ".jpeg"
+    ) {
       return callback(null, false);
     }
     callback(null, true);
@@ -118,26 +129,21 @@ router.get("/logout", (req, res) => {
 //! نیاز به اصلاح داره 
 //! باید یه پست ایجاد کنی تا بتونی تغییرات رو انجام بدی
 router.get('/dashboard', (req, res) =>
-  Post.find({})
-    .then((blogPost) => {
-      User.find({})
-        .then((user) => {
-          for (data1 in blogPost) {
-            for (data2 in user) {
-              if (blogPost[data1].author == user[data2]._id) {
-                blogPost[data1].userName = user[data2].userName;
-              }
-            }
-          }
+  Post.find({}).populate(
+      'author', { userName: 1, description: 1, profileImage: 1 })
+    .then((posts) => {
+      posts.forEach(post => {
+        post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+      });
+      // console.log('posts :>> ', posts[0].createdAt.split('T'));
+
           let checkExistPost = 0;
-          if (blogPost.length == 0) checkExistPost = 1;
+          if (posts.length == 0) checkExistPost = 1;
           res.render('dashboard', {
             name: req.user.userName,
-            blogPost: blogPost,
-            checkExistPost: checkExistPost
+            posts,
+            checkExistPost
           });
-        })
-
     })
     .catch(err => console.log(err))
 );
@@ -158,7 +164,7 @@ router.post('/editProfile', uploadProfileImage.single("profilePicture"), (req, r
   })
     .then(async (user) => {
       //? Change username
-      if (req.body.userNameChange && user.userName!= req.body.userNameChange) {
+      if (req.body.userNameChange && user.userName != req.body.userNameChange) {
         user.userName = req.body.userNameChange
         req.flash("success_msg", "تغییرات با موفقیت اعمال شد");
       }
@@ -172,8 +178,7 @@ router.post('/editProfile', uploadProfileImage.single("profilePicture"), (req, r
         let check = await checkExistEmail(req.body.emailChange)
         if (check) {
           req.flash("error_msg", "رایانامه تکراری است");
-        }
-        else {
+        } else {
           user.email = req.body.emailChange;
         }
       }
@@ -182,30 +187,25 @@ router.post('/editProfile', uploadProfileImage.single("profilePicture"), (req, r
         let setUp = await compareAsync(req.body.oldPassword, req.body.newPassword)
         if (setUp == true) {
           req.flash("error_msg", "رمز قدیمی اشتباه وارد شده");
-        }
-        else {
+        } else {
           if (req.body.newPassword.length < 6) {
             req.flash("error_msg", "رمز عبور حداقل باید 6 حرف (کارکتر) باشد");
-          }
-          else if (req.body.newPassword === req.body.oldPassword) {
+          } else if (req.body.newPassword === req.body.oldPassword) {
             req.flash("error_msg", "رمز جدید باید با رمز قدیمی متفاوت باشد");
-          }
-          else if (req.body.newPassword != req.body.confirmNewPassword) {
+          } else if (req.body.newPassword != req.body.confirmNewPassword) {
             req.flash("error_msg", "تکرار رمز عبور اشتباه است");
-          }
-          else {
+          } else {
             user.password = await hashPassword(req.body.newPassword)
           }
         }
       }
       //? Change Profile picture
-      if(req.file){
-        if(user.profileImage != "/images/profileImages/defaultImage/profile.png") {
-            fs.unlinkSync("./public" + user.profileImage);
-            user.profileImage = "/images/profileImages" + req.file.filename;
-        }
-        else {
-          user.profileImage =  "/images/profileImages" + req.file.filename;
+      if (req.file) {
+        if (user.profileImage != "/images/profileImages/defaultImage/profile.png") {
+          fs.unlinkSync("./public" + user.profileImage);
+          user.profileImage = "/images/profileImages/" + req.file.filename;
+        } else {
+          user.profileImage = "/images/profileImages/" + req.file.filename;
         }
         req.flash("success_msg", "تغییرات با موفقیت اعمال شد");
       }
@@ -224,7 +224,7 @@ router.get("/myArticles", (req, res) => {
     author: req.user._id
   }).then(posts => {
     let checkExistPost = 0;
-    if(posts.length == 0) checkExistPost = 1;
+    if (posts.length == 0) checkExistPost = 1;
     //! بعد از اینکه پست اضافه کردی حواست باشه برای نشون دادن زمان پست به صورت شمسی باید کد های زیر رو اعمال کنیم 
     // for (var data in posts) {
     //   //Set Hour
@@ -262,12 +262,66 @@ router.get("/myArticles", (req, res) => {
 //********************* << Add Article Handle >> *********************//
 //**** Add Article Page request
 router.get("/addArticle", (req, res) => {
-  if (!req.user) {
-    res.redirect("/login");
-  }
   res.render("addArticle");
 });
+
+//**** Add Article request handle
+router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) => {
+  const {
+    subject,
+    summery,
+    article,
+    articleKeys,
+  } = req.body;
+
+  let errors = [];
+  // Check required fields
+  if (
+    subject === "" ||
+    summery === "" ||
+    article === ""
+  ) {
+    fs.unlinkSync("./public/images/postImages/" + req.file.filename);
+    errors.push({
+      msg: "لطفا اطلاعات قسمت‌هایی که با ستاره مشخص شده‌اند را کامل کنید"
+    });
+    res.render("addArticle", {
+      errors,
+      subject,
+      summery,
+      article,
+      articleKeys
+    });
+  } else {
+    const newPost = new Post({
+      subject,
+      summery,
+      article,
+      articleKeys
+    });
+    //? If user wrote articleKeys 
+    if (articleKeys) {
+      newPost.articleKeys = articleKeys.split(' ');
+    }
+    //? If user send profile picture
+    if (req.file) {
+      newPost.image = "/images/postImages/" + req.file.filename;
+    }
+    //? Set user id for author information
+    newPost.author = req.user._id;
+    //? Save to DB
+    newPost
+      .save()
+      .then(() => {
+        req.flash("success_msg", "به خاطراتمون اضافه شد!");
+        res.redirect("/dashboard");
+      })
+      .catch(err => console.log(err));
+  }
+});
 //********************* //
+
+
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {

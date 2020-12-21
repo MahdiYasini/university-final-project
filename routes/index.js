@@ -9,6 +9,8 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const passport = require('passport');
 
+const fs = require('fs');
+
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
 // For save profile image.
@@ -90,6 +92,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
 
   //Check any error exist or not.
   if (errors.length > 0) {
+    fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
     res.render("register", {
       errors,
       userName,
@@ -101,7 +104,6 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
   else {
     //! We have to use else because solve the error of the below  
     // Cannot set headers after they are sent to the client
-
     // Validation for existence user 
     User.findOne({
       userName: userName

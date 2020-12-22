@@ -224,9 +224,9 @@ router.get("/article/:id", (req, res) => {
     _id: postKey
   })
     .then(post => {
-      // post.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${post.date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
+      post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
       res.render("article", {
-        blogPost: post
+        post
       });
     })
     .catch(err => console.log(err));

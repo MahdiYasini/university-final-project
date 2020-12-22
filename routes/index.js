@@ -222,29 +222,7 @@ router.get("/article/:id", (req, res) => {
     _id: postKey
   })
     .then(post => {
-      // //Set Hour
-      // let setHour = post.date.getHours() - 3;
-      // if (setHour < 0) {
-      //   setHour += 24;
-      // }
-
-      // //Set Minute
-      // let setMinute = post.date.getMinutes() - 30;
-      // if (setMinute < 0) {
-      //   setMinute += 60;
-      //   setHour -= 1;
-      // }
-
-      // //Set Second
-      // let setSecond = post.date.getSeconds();
-      // if (setSecond < 0) {
-      //   setSecond += 60;
-      //   setMinute -= 1;
-      // }
-
-
-      // post.time = `${setHour}:${setMinute}:${setSecond}`;
-      // post.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${post.date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
+t.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${post.date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
       res.render("article", {
         blogPost: post
       });

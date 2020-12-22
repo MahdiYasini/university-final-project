@@ -9,6 +9,8 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const passport = require('passport');
 
+const moment = require('jalali-moment');
+
 const fs = require('fs');
 
 //********************* <<Setup Multer for save file in local storage>> *********************//
@@ -222,7 +224,7 @@ router.get("/article/:id", (req, res) => {
     _id: postKey
   })
     .then(post => {
-t.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${post.date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
+      // post.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${post.date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
       res.render("article", {
         blogPost: post
       });
@@ -231,6 +233,45 @@ t.dateCalender = moment(`${post.date.getFullYear()}/${post.date.getMonth()}/${po
 });
 //********************* //
 
+// /authorArticles/<%= posts[post]['author'].userName%>
+
+//********************* << Author Articles Handle >> *********************//
+router.get("/authorArticles/:id", (req, res) => {
+  let postKey = [];
+  let variable = 0;
+  for (let i = 0; req.path[i] != null; i++) {
+    if (req.path[i] === "/") {
+      variable++;
+    }
+    if (variable === 2) {
+      if (req.path[i] != "/") {
+        postKey.push(req.path[i]);
+      }
+    }
+  }
+  postKey = postKey.join("");
+  User.findOne({
+    userName: postKey
+  })
+    .then(user => {
+      Post.find({
+        author: user._id
+      })
+        .then(posts => {
+          lastActivity = moment(user.updatedAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+          posts.forEach(post => {
+            post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+          });
+          res.render('authorArticles', {
+            user,
+            name: req.user.userName,
+            posts,
+            
+          });
+        })
+    })
+});
+//********************* //
 
 //! بعد از اینکه قسمت افزودن خاطره رو ایجاد کردی حتما چک کن حتما حتما
 // /* GET home page. */

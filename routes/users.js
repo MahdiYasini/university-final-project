@@ -266,6 +266,7 @@ router.get("/addArticle", (req, res) => {
 });
 
 //**** Add Article request handle
+//Todo حواست باشه کلید واژه خالی هم میگیره
 router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) => {
   const {
     subject,

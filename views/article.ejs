@@ -6,15 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/addArticle.css">
     <link rel="icon" href="/images/general/favicon-16x16.png" type="image/gif" sizes="16x16">
     <title>یک خاطره شیرین</title>
 </head>
 
 <body>
-
     <div class="container p-4">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="#">
@@ -44,7 +43,7 @@
                 </ul>
             </div>
         </nav>
-
+        <% include ./partials/messages %>
         <div class="mt-5 card ">
             <div class="jumbotron">
                 <div class="text-center">
@@ -71,26 +70,41 @@
         </div>
         <div class="col-12 d-flex justify-content-center m-1">
             <div class="card text-white bg-secondary col-8" style="max-width: 40rem;">
-                <div class="card-header table-info">افزودن نظر</div>
-                    <form class = "col-12">  
-                          <div class="form-group">
-                            <label for="exampleTextarea">Example textarea</label>
-                            <textarea class="form-control" id="exampleTextarea" rows="3" spellcheck="false"></textarea>
-                          </div>
-                        
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                      
-                      </form>
+                <div class="row card-header table-info bg-primary">افزودن نظر</div>
+                <form class="col-12" action="/addComment" method="POST">
+                    <div class="form-group">
+                        <% if(!userLoggedIn) { %>
+                        <label for="userName">نامت رو وارد کن</label>
+                        <input type="name" id="usreName" name="userName" class="form-control"
+                            placeholder="نام را وارد کنید" />
+                        <% } %>
+                        <input type="hidden" value="<%= post.id %>" name="postId" />
+                        <label for="exampleTextarea">نظرت چیه؟</label>
+                        <textarea class="form-control" id="exampleTextarea" rows="3" spellcheck="false"
+                            name="comment"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">افزودن نظر</button>
+                </form>
+            </div>
         </div>
-    </div>
-
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-        crossorigin="anonymous"></script>
+        <% comments.forEach(element => { %>
+        <div class="col-12 d-flex justify-content-center m-1">
+            <div class="card text-white bg-primary col-8" style="max-width: 40rem;">
+                <div class="row card-header">
+                    <h4><%= element.userName %></h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><%= element.comment %></p>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+        </script>
 </body>
-
 </html>

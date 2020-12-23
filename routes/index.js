@@ -4,6 +4,7 @@ var router = express.Router();
 
 const Post = require('../Models/Post');
 const User = require('../Models/User');
+const Comment = require('../Models/Comment');
 
 const path = require("path");
 const bcrypt = require("bcryptjs");
@@ -203,7 +204,6 @@ router.post("/login", (req, res, next) => {
 
 
 //********************* << Article Page Handle >> *********************//
-// TODO Need to check and improve
 router.get("/article/:id", (req, res) => {
   let postKey = [];
   let variable = 0;
@@ -225,15 +225,59 @@ router.get("/article/:id", (req, res) => {
   })
     .then(post => {
       post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
-      res.render("article", {
-        post
-      });
+      let userLoggedIn = 0;
+      if (req.user) userLoggedIn = 1;
+      Comment.find({
+        post: postKey
+      })
+        .then((comments) => {
+          res.render("article", {
+            post,
+            userLoggedIn,
+            comments
+          });
+        })
     })
     .catch(err => console.log(err));
 });
 //********************* //
 
 // /authorArticles/<%= posts[post]['author'].userName%>
+
+//********************* << Article Page Handle >> *********************//
+router.post("/addComment", (req, res, next) => {
+  let flag = 0;
+  if (req.body.comment == '') {
+    req.flash("error_msg", "لطفا نظرت رو بنویس");
+    res.redirect("/article/" + req.body.postId);
+  }
+  else {
+    const newComment = new Comment({
+      comment: req.body.comment,
+      post: req.body.postId
+    });
+    if (req.user) {
+      newComment.userName = req.user.userName;
+      flag = 1;
+    }
+    else {
+      if(req.body.userName == '') {
+        req.flash("error_msg", "لطفا اسمت رو بنویس");
+        res.redirect("/article/" + req.body.postId);
+      }
+      else {
+        newComment.userName = req.body.userName;
+        flag = 1;
+      }
+    }
+    if(flag = 1) {
+      newComment.save();
+      req.flash("success_msg", "نظرت با موفقیت ثبت شد");
+      res.redirect("/article/" + req.body.postId);
+    }
+  }
+});
+//********************* //
 
 //********************* << Author Articles Handle >> *********************//
 router.get("/authorArticles/:id", (req, res) => {
@@ -266,7 +310,7 @@ router.get("/authorArticles/:id", (req, res) => {
             user,
             name: req.user.userName,
             posts,
-            
+
           });
         })
     })

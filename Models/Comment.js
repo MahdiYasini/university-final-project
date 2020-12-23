@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
-    text: {
+    comment: {
         type: String,
         required: true,
     },
@@ -9,7 +9,7 @@ const CommentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    author: {
+    post: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Post'
     }

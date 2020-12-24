@@ -14,6 +14,11 @@ const moment = require('jalali-moment');
 
 const fs = require('fs');
 
+//! last activty user dastan dare bayad dorost she
+//! menu bar ham dastan dare bayad dorost beshe
+//! hosele dashti like ham bezar
+
+
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
 // For save profile image.
@@ -261,7 +266,7 @@ router.post("/addComment", (req, res, next) => {
       flag = 1;
     }
     else {
-      if(req.body.userName == '') {
+      if (req.body.userName == '') {
         req.flash("error_msg", "لطفا اسمت رو بنویس");
         res.redirect("/article/" + req.body.postId);
       }
@@ -270,7 +275,7 @@ router.post("/addComment", (req, res, next) => {
         flag = 1;
       }
     }
-    if(flag = 1) {
+    if (flag = 1) {
       newComment.save();
       req.flash("success_msg", "نظرت با موفقیت ثبت شد");
       res.redirect("/article/" + req.body.postId);
@@ -308,9 +313,7 @@ router.get("/authorArticles/:id", (req, res) => {
           });
           res.render('authorArticles', {
             user,
-            name: req.user.userName,
             posts,
-
           });
         })
     })
@@ -333,33 +336,45 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
     }
   }
   postKey = postKey.join("");
-      Post.find({
-         articleKeys: { "$in" : [postKey]}  
-      }).populate(
-        'author', { userName: 1, description: 1, profileImage: 1 })
-          .then(posts => {
-            posts.forEach(post => {
-              post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
-            }); 
-                let checkExistPost = 0;
-                if (posts.length == 0) checkExistPost = 1;
-                res.render('postByArticleKeys', {
-                  postKey,
-                  posts,
-                  checkExistPost
-                });
-          })
+  Post.find({
+    articleKeys: { "$in": [postKey] }
+  }).populate(
+    'author', { userName: 1, description: 1, profileImage: 1 })
+    .then(posts => {
+      posts.forEach(post => {
+        post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+      });
+      let checkExistPost = 0;
+      if (posts.length == 0) checkExistPost = 1;
+      res.render('postByArticleKeys', {
+        postKey,
+        posts,
+        checkExistPost
+      });
+    })
 });
 //********************* //
 
 //! بعد از اینکه قسمت افزودن خاطره رو ایجاد کردی حتما چک کن حتما حتما
-// /* GET home page. */
-// router.get('/', function (req, res, next) {
-//   Post.find({}).populate("author", { userName: 1 }).exec((err, posts) => {
-//     res.render('homepage', {
-//       blogPost: posts
-//     })
-//   });
-// });
+/* GET home page. */
+router.get('/', function (req, res, next) {
+  if (req.user) res.redirect('dashboard');
+  else {
+    Post.find({}).populate(
+      'author', { userName: 1, description: 1, profileImage: 1 })
+      .then((posts) => {
+        posts.forEach(post => {
+          post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+        });
+        let checkExistPost = 0;
+        if (posts.length == 0) checkExistPost = 1;
+        res.render('mainPage', {
+          posts,
+          checkExistPost
+        });
+      })
+      .catch(err => console.log(err))
+  }
+});
 
 module.exports = router;

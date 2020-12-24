@@ -128,9 +128,6 @@ router.get("/logout", (req, res) => {
 //********************* //
 
 //********************* <<Handle Dashboard request >> *********************//
-//! کد داشبورد برای پیدا کردن نام نویسنده های پست باید بهینه بشه 
-//! نیاز به اصلاح داره 
-//! باید یه پست ایجاد کنی تا بتونی تغییرات رو انجام بدی
 router.get('/dashboard', (req, res) =>
   Post.find({}).populate(
       'author', { userName: 1, description: 1, profileImage: 1 })
@@ -138,8 +135,6 @@ router.get('/dashboard', (req, res) =>
       posts.forEach(post => {
         post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
       });
-      // console.log('posts :>> ', posts[0].createdAt.split('T'));
-
           let checkExistPost = 0;
           if (posts.length == 0) checkExistPost = 1;
           res.render('dashboard', {

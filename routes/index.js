@@ -333,7 +333,6 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
     }
   }
   postKey = postKey.join("");
-  console.log('postKey :>> ', postKey);
       Post.find({
          articleKeys: { "$in" : [postKey]}  
       }).populate(
@@ -344,7 +343,6 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
             }); 
                 let checkExistPost = 0;
                 if (posts.length == 0) checkExistPost = 1;
-                console.log('posts :>> ', posts);
                 res.render('postByArticleKeys', {
                   postKey,
                   posts,

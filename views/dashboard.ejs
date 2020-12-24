@@ -50,46 +50,59 @@
                 <h4> هیچ خاطره‌ای برای نمایش وجود ندارد&nbsp;&nbsp; <span>:(</span> </h4>
             </div>
         </div>
-        <% } else { %> 
-            <% for(var post in posts){ %>
-            <div class="mt-5 card ">
-                <div class="jumbotron">
-                    <div class="text-center">
-                        <img src="<%= posts[post]['image'] %>" class="img-fluid" alt="عکسی از خاطرات زندگی">
+        <% } else { %>
+        <% for(var post in posts){ %>
+        <div class="mt-5 card ">
+            <div class="jumbotron">
+                <div class="text-center">
+                    <img src="<%= posts[post]['image'] %>" class="img-fluid" alt="عکسی از خاطرات زندگی">
+                </div>
+                <div class="col-sm-8 mx-auto">
+                    <div class="col-12 text-center">
+                        <h1 class="text-center">
+                            <%= posts[post].subject %>
+                        </h1>
                     </div>
-                    <div class="col-sm-8 mx-auto">
-                        <div class = "col-12 text-center">
-                            <h1 class="text-center">
-                                <%= posts[post].subject %>
-                            </h1>
-                        </div>
-                        <div class="col 12 row">
-                            <p> نوشته شده در تاریخ:</p>
-                            <p class="mx-1">
-                                <%= posts[post].time%>
-                            </p>
-                        </div>
-                        <div class="col 12 row">
-                                <img src="<%= posts[post]['author'].profileImage %>" class="rounded-circle w-25 p-3" alt="Cinque Terre">
-                                <p class="p-5">
-                                    <a class="nav-link" href="/authorArticles/<%= posts[post]['author'].userName%>">
-                                        <%= posts[post]['author'].userName%>
-                                    </a>
-                                </p>
-                        </div>
-                        <div class="col 12 row">
-                            <p>
-                                <%= posts[post].summery %>...</p>
-                        </div>
-                        <div class="text-center"> <a type="submit" class="btn btn-primary readMore"
-                                href="/article/<%= posts[post]._id %>" role="button">ادامه
-                                مطلب
-                                &raquo;</a>
-                        </div>
+                    <div class="col 12 row">
+                        <h4>
+                            <%= posts[post].summery %>...
+                        </h4>
+                    </div>
+                    <div class="col 12 row">
+                        <p>کلید واژه‌ها: </p>
+                        <% posts[post].articleKeys.forEach(key => { %>
+                        <h6>
+                            <a class="nav-link p-1 m-0" href="/authorArticles/<%= key %> ">
+                                <%= key %>
+                            </a>
+                        </h6>,&nbsp;
+
+                        <% }); %>
+                    </div>
+                    <div class="col 12 row">
+                        <p> نوشته شده در تاریخ:</p>
+                        <p class="mx-1">
+                            <%= posts[post].time%>
+                        </p>
+                    </div>
+                    <div class="col-10 row align-content-center align-items-center">
+                        <img src="<%= posts[post]['author'].profileImage %>" class="rounded-circle w-25 p-3"
+                            alt="Cinque Terre"/>
+                        <p class="col-6 text-right m-1">
+                            <a class="nav-link" href="/authorArticles/<%= posts[post]['author'].userName%>">
+                                <%= posts[post]['author'].userName%>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="text-center"> <a type="submit" class="btn btn-primary readMore"
+                            href="/article/<%= posts[post]._id %>" role="button">ادامه
+                            مطلب
+                            &raquo;</a>
                     </div>
                 </div>
             </div>
-            <% } %>
+        </div>
+        <% } %>
         <% } %>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -47,32 +47,42 @@
             </div>
         </div>
         <% } else { %>
-            <% for(var data in blogPost){ %>
+            <% for(var post in posts){ %>
             <div class="mt-5 card ">
                 <div class="jumbotron">
                     <div class="text-center">
-                        <img src="<%= blogPost[data]['image'] %>" class="img-fluid" alt="عکسی از خاطرات زندگی">
+                        <img src="<%= posts[post]['image'] %>" class="img-fluid" alt="عکسی از خاطرات زندگی">
                     </div>
                     <div class="col-sm-8 mx-auto">
-                        <h1 class="col-4">
-                            <%= blogPost[data].subject %>
+                        <h1 class="text-center">
+                            <%= posts[post].subject %>
                         </h1>
                         <div class="col 12 row">
                             <p> نوشته شده در تاریخ:</p>
                             <p class="mx-1">
-                                <%= blogPost[data].dateCalender%>
+                                <%= posts[post].dateCalender%>
                             </p>
                             <p> - </p>
                             <p class="mx-1">
-                                <%= blogPost[data].time%>
+                                <%= posts[post].time%>
                             </p>
                         </div>
                         <div class="col-12">
                             <p>
-                                <%= blogPost[data].summery %>...</p>
+                                <%= posts[post].summery %>...</p>
+                        </div>
+                        <div class="col 12 row">
+                            <p>کلید واژه‌ها: </p>
+                            <% posts[post].articleKeys.forEach(key => { %>
+                            <h6>
+                                <a class="nav-link p-1 m-0" href="/articlesBy/<%= key %> ">
+                                    <%= key %>
+                                </a>
+                            </h6>,&nbsp;
+                            <% }); %>
                         </div>
                         <div class="text-center"> <a type="submit" class="btn btn-primary readMore"
-                                href="/article/<%= blogPost[data]._id %>" role="button">ادامه
+                                href="/article/<%= posts[post]._id %>" role="button">ادامه
                                 مطلب
                                 &raquo;</a></div>
                     </div>

@@ -18,6 +18,15 @@ var app = express();
 const passport = require('passport');
 const { ensureAuthenticated } = require('./config/auth');
 
+
+//********************* << For support persian (farsi) routing>> *********************//
+//? In other hand Express routing non ascii characters (Farsi)
+let unescape = require('querystring').unescape;
+app.use((req, res, next) => {
+  req.url = unescape(req.url);
+  next();
+});
+
 //********************* <<setup cookie and session>> *********************//
 app.use(cookieSession({
   maxAge: 24 * 60 * 1000,

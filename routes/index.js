@@ -21,7 +21,7 @@ const fs = require('fs');
 
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
-// For save profile image.
+//? For save profile image.
 let uploadProfileImage = multer({
   storage: multer.diskStorage({
     destination: function (req, file, callback) {
@@ -36,7 +36,7 @@ let uploadProfileImage = multer({
   }),
   fileFilter: function (req, file, callback) {
     //! The below code didn't work, I don't know why.
-    // if (path.extname(file.originalname) !== ".png" && ".jpeg" && ".jpg" && ".gif")
+    //? if (path.extname(file.originalname) !== ".png" && ".jpeg" && ".jpg" && ".gif")
     if (
       path.extname(file.originalname) !== ".png" &&
       path.extname(file.originalname) !== ".gif" &&
@@ -51,8 +51,7 @@ let uploadProfileImage = multer({
     fileSize: 7000000
   }
 });
-
-
+//********************* //
 
 //********************* <<Handle Registering request >> *********************//
 //**** Register Page request
@@ -73,32 +72,27 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
     password,
     password2,
   } = req.body;
-
-  //Define for add probable errors.
+  //? Define for add probable errors.
   let errors = [];
-
-  // Check required fields
+  //? Check required fields
   if (!userName || !email || !password || !password2) {
     errors.push({
       msg: "لطفااطلاعات را کامل کنید"
     });
   };
-
-  // Check matching passwords
+  //? Check matching passwords
   if (password !== password2) {
     errors.push({
       msg: "تکرار رمز صحیح نیست"
     });
   };
-
-  //Check password length
+  //? Check password length
   if (password.length < 6) {
     errors.push({
       msg: "حداقل 6 حرف (کارکتر) برای رمز"
     });
   }
-
-  //Check any error exist or not.
+  //? Check any error exist or not.
   if (errors.length > 0) {
     fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
     res.render("register", {
@@ -111,8 +105,8 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
   }
   else {
     //! We have to use else because solve the error of the below  
-    // Cannot set headers after they are sent to the client
-    // Validation for existence user 
+    //? Cannot set headers after they are sent to the client
+    //? Validation for existence user 
     User.findOne({
       userName: userName
     }).then(user => {
@@ -129,8 +123,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
         });
       }
     });
-
-    // Validation for existence email 
+    //? Validation for existence email 
     User.findOne({
       email: email
     }).then(user => {
@@ -147,30 +140,26 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
         });
       }
     });
-
-    // Create new user
+    //? Create new user
     const newUser = new User({
       userName,
       email,
       password,
     });
-
-    // If user upload profile picture
+    //? If user upload profile picture
     if (req.file) {
       newUser.profileImage = "/images/profileImages/" + req.file.filename;
     }
-
-    // If user has own description
+    //? If user has own description
     if (req.body.description) {
       newUser.description = req.body.description
     }
-
-    // Hashing password
+    //? Hashing password
     bcrypt.genSalt(10, (err, salt) =>
       bcrypt.hash(password, salt, (err, hash) => {
         if (err) throw err;
         newUser.password = hash;
-        //Save user to DB.
+        //? Save user to DB.
         newUser
           .save()
           .then(user => {
@@ -183,10 +172,6 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
   }
 });
 //********************* //
-
-
-
-
 
 //********************* <<Handle Login request >> *********************//
 //**** Login Page request
@@ -207,12 +192,10 @@ router.post("/login", (req, res, next) => {
 });
 //********************* //
 
-
 //********************* << Article Page Handle >> *********************//
 router.get("/article/:id", (req, res) => {
   let postKey = [];
   let variable = 0;
-
   for (let i = 0; req.path[i] != null; i++) {
     if (req.path[i] === "/") {
       variable++;
@@ -223,7 +206,6 @@ router.get("/article/:id", (req, res) => {
       }
     }
   }
-
   postKey = postKey.join("");
   Post.findOne({
     _id: postKey
@@ -246,8 +228,6 @@ router.get("/article/:id", (req, res) => {
     .catch(err => console.log(err));
 });
 //********************* //
-
-// /authorArticles/<%= posts[post]['author'].userName%>
 
 //********************* << Article Page Handle >> *********************//
 router.post("/addComment", (req, res, next) => {
@@ -355,8 +335,7 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
 });
 //********************* //
 
-//! بعد از اینکه قسمت افزودن خاطره رو ایجاد کردی حتما چک کن حتما حتما
-/* GET home page. */
+//********************* << Homepage Handle >> *********************//
 router.get('/', function (req, res, next) {
   if (req.user) res.redirect('dashboard');
   else {
@@ -376,5 +355,6 @@ router.get('/', function (req, res, next) {
       .catch(err => console.log(err))
   }
 });
+//********************* //
 
 module.exports = router;

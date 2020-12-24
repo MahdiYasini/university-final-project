@@ -14,6 +14,9 @@ const fs = require('fs');
 const moment = require('jalali-moment');
 
 
+//! آخرین فعالیت کاربر درست کار نمیکنه بازنگری بفرما
+
+
 //********************* <<Functions>> *********************//
 const checkExistEmail = async (email) => {
   const user = await User.findOne({
@@ -52,12 +55,9 @@ async function hashPassword(newPasswordSendForHashing) {
 }
 //********************* //
 
-
-//! آخرین فعالیت کاربر درست کار نمیکنه بازنگری بفرما
-
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
-// For save profile image.
+//? For save profile image.
 let uploadProfileImage = multer({
   storage: multer.diskStorage({
     destination: function (req, file, callback) {
@@ -72,7 +72,7 @@ let uploadProfileImage = multer({
   }),
   fileFilter: function (req, file, callback) {
     //! The below code didn't work, I don't know why.
-    // if (path.extname(file.originalname) !== ".png" && ".jpeg" && ".jpg" && ".gif")
+    //? if (path.extname(file.originalname) !== ".png" && ".jpeg" && ".jpg" && ".gif")
     if (
       path.extname(file.originalname) !== ".png" &&
       path.extname(file.originalname) !== ".gif" &&
@@ -234,7 +234,6 @@ router.get("/myArticles", (req, res) => {
 });
 //********************* //
 
-
 //********************* << Add Article Handle >> *********************//
 //**** Add Article Page request
 router.get("/addArticle", (req, res) => {
@@ -251,7 +250,7 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
   } = req.body;
 
   let errors = [];
-  // Check required fields
+  //? Check required fields
   if (
     subject === "" ||
     summery === "" ||
@@ -303,13 +302,5 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
   }
 });
 //********************* //
-
-
-
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  req.flash("success_msg", "شما ثبت نام کردید و میتوانید وارد شوید");
-  res.redirect("/");
-});
 
 module.exports = router;

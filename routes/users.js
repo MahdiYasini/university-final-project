@@ -269,7 +269,6 @@ router.get("/addArticle", (req, res) => {
 });
 
 //**** Add Article request handle
-//Todo حواست باشه کلید واژه خالی هم میگیره
 router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) => {
   const {
     subject,
@@ -305,7 +304,14 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
     });
     //? If user wrote articleKeys 
     if (articleKeys) {
-      newPost.articleKeys = articleKeys.split(' ');
+      let arrayOfArticleKeys;
+      arrayOfArticleKeys = articleKeys.split(' ');
+      arrayOfArticleKeys = arrayOfArticleKeys.filter(function(str) {
+        return /\S/.test(str);
+      });
+      if (arrayOfArticleKeys.length) {
+        newPost.articleKeys = arrayOfArticleKeys;
+      }
     }
     //? If user send profile picture
     if (req.file) {

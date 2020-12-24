@@ -75,6 +75,16 @@
                             <p>
                                 <%= posts[post].summery %>...</p>
                         </div>
+                        <div class="col 12 row">
+                            <p>کلید واژه‌ها: </p>
+                            <% posts[post].articleKeys.forEach(key => { %>
+                            <h6>
+                                <a class="nav-link p-1 m-0" href="/articlesBy/<%= key %> ">
+                                    <%= key %>
+                                </a>
+                            </h6>,&nbsp;
+                            <% }); %>
+                        </div>
                         <div class="text-center"> <a type="submit" class="btn btn-primary readMore"
                                 href="/article/<%= posts[post]._id %>" role="button">ادامه
                                 مطلب

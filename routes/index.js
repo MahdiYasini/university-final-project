@@ -317,6 +317,43 @@ router.get("/authorArticles/:id", (req, res) => {
 });
 //********************* //
 
+//********************* << Articles by article keys Handle >> *********************//
+router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
+  let postKey = [];
+  let variable = 0;
+  console.log('req.path :>> ', req.path);
+  for (let i = 0; req.path[i] != null; i++) {
+    if (req.path[i] === "/") {
+      variable++;
+    }
+    if (variable === 2) {
+      if (req.path[i] != "/") {
+        postKey.push(req.path[i]);
+      }
+    }
+  }
+  postKey = postKey.join("");
+  console.log('postKey :>> ', postKey);
+      Post.find({
+         articleKeys: { "$in" : [postKey]}  
+      }).populate(
+        'author', { userName: 1, description: 1, profileImage: 1 })
+          .then(posts => {
+            posts.forEach(post => {
+              post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+            }); 
+                let checkExistPost = 0;
+                if (posts.length == 0) checkExistPost = 1;
+                console.log('posts :>> ', posts);
+                res.render('postByArticleKeys', {
+                  postKey,
+                  posts,
+                  checkExistPost
+                });
+          })
+});
+//********************* //
+
 //! بعد از اینکه قسمت افزودن خاطره رو ایجاد کردی حتما چک کن حتما حتما
 // /* GET home page. */
 // router.get('/', function (req, res, next) {

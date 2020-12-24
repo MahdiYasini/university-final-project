@@ -228,33 +228,11 @@ router.get("/myArticles", (req, res) => {
   }).then(posts => {
     let checkExistPost = 0;
     if (posts.length == 0) checkExistPost = 1;
-    //! بعد از اینکه پست اضافه کردی حواست باشه برای نشون دادن زمان پست به صورت شمسی باید کد های زیر رو اعمال کنیم 
-    // for (var data in posts) {
-    //   //Set Hour
-    //   let setHour = posts[data].date.getHours() - 3;
-    //   if (setHour < 0) {
-    //     setHour += 24;
-    //   }
-
-    //   //Set Minute
-    //   let setMinute = posts[data].date.getMinutes() - 30;
-    //   if (setMinute < 0) {
-    //     setMinute += 60;
-    //     setHour -= 1;
-    //   }
-
-    //   //Set Second
-    //   let setSecond = posts[data].date.getSeconds();
-    //   if (setSecond < 0) {
-    //     setSecond += 60;
-    //     setMinute -= 1;
-    //   }
-
-    //   posts[data]["time"] = `${setHour}:${setMinute}:${setSecond}`;
-    //   posts[data]["dateCalender"] = moment(`${posts[data].date.getFullYear()}/${posts[data].date.getMonth()}/${posts[data].date.getDate()}`, "YYYY/MM/DD").locale("fa").format("YYYY/MM/DD");
-    // }
+    posts.forEach(post => {
+      post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+    }); 
     res.render("myArticles", {
-      blogPost: posts,
+      posts,
       checkExistPost: checkExistPost
     });
   });

@@ -5,6 +5,7 @@ var router = express.Router();
 const Post = require('../Models/Post');
 const User = require('../Models/User');
 const Comment = require('../Models/Comment');
+const Like = require('../Models/Like');
 
 const path = require("path");
 const bcrypt = require("bcryptjs");
@@ -211,18 +212,30 @@ router.get("/article/:id", (req, res) => {
     _id: postKey
   })
     .then(post => {
-      post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
-      let userLoggedIn = 0;
-      if (req.user) userLoggedIn = 1;
-      Comment.find({
+      Like.findOne({
         post: postKey
       })
-        .then((comments) => {
-          res.render("article", {
-            post,
-            userLoggedIn,
-            comments
-          });
+        .then(postLikes => {
+          post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+          let userLoggedIn = 0;
+          if (req.user) userLoggedIn = 1;
+          Comment.find({
+            post: postKey
+          })
+            .then((comments) => {
+              if (postLikes == null) postLikes = 0;
+              else postLikes = postLikes.counted;
+              
+              let checkUserLoggedIn = 0;
+              if(req.user) checkUserLoggedIn =1;
+              res.render("article", {
+                post,
+                userLoggedIn,
+                comments,
+                postLikes: postLikes,
+                checkUserLoggedIn
+              });
+            })
         })
     })
     .catch(err => console.log(err));
@@ -331,6 +344,51 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
         posts,
         checkExistPost
       });
+    })
+});
+//********************* //
+
+//********************* << Add Like to the post >> *********************//
+router.post("/addLike/:id", (req, res) => {
+  let postKey = [];
+  let variable = 0;
+  for (let i = 0; req.path[i] != null; i++) {
+    if (req.path[i] === "/") {
+      variable++;
+    }
+    if (variable === 2) {
+      if (req.path[i] != "/") {
+        postKey.push(req.path[i]);
+      }
+    }
+  }
+  postKey = postKey.join("");
+  Like.findOne({
+    post: postKey
+  })
+    .then(likeInformation => {
+      if (!likeInformation) {
+        const newLikeInformation = new Like({
+          post: req.body.postId,
+          users: [req.user._id],
+          counted: 1
+        });
+        req.flash("success_msg", "شما این خاطره را پسندیدی");
+        newLikeInformation.save();
+      }
+      else {
+        const checkUserLikedPost = likeInformation.users.find(element => element == req.user.id);
+        if (checkUserLikedPost) {
+          req.flash("error_msg", "قبلا این خاطره را پسندیدی");
+        }
+        else {
+          req.flash("success_msg", "شما این خاطره را پسندیدی");
+          likeInformation.users.push(req.user._id)
+          likeInformation.counted = likeInformation.counted + 1;
+          likeInformation.save();
+        }
+      }
+      res.redirect(`/article/${req.body.postId}`);
     })
 });
 //********************* //

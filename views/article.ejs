@@ -65,6 +65,29 @@
                             <%= post.article %>
                         </p>
                     </div>
+                    <div class="col 12 row">
+                        <p>کلید واژه‌ها: </p>
+                        <% post.articleKeys.forEach(key => { %>
+                        <h6>
+                            <a class="nav-link p-1 m-0" href="/articlesBy/<%= key %>">
+                                <%= key %>
+                            </a>
+                        </h6>,&nbsp;
+                        <% }); %>
+                    </div>
+                    <div class="col 12 row text-right">
+                        <form class="col-12" action="/addLike/<%= post.id %>" method="POST">
+                            <% if(checkUserLoggedIn) { %>
+                            <input type="hidden" value="<%= post.id %>" name="postId" />
+                            <button style="float: right;" type="submit" class="btn btn-danger">
+                                <i class="fa fa-thumbs-up fa-2x"></i>
+                            </button>
+                            <% } %>
+                            <legend class="p-1">
+                                &nbsp;&nbsp;<%= postLikes %> کاربر پسندیده
+                            </legend>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,4 +130,5 @@
             integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
         </script>
 </body>
+
 </html>

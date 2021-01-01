@@ -8,7 +8,8 @@ const flash = require('connect-flash');
 
 const session = require('express-session');
 const cookieSession = require('cookie-session');
-const cookieKey = require('./config/Key');
+
+const {cookieKey} = require('./config/securityKeys');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -30,7 +31,7 @@ app.use((req, res, next) => {
 //********************* <<setup cookie and session>> *********************//
 app.use(cookieSession({
   maxAge: 24 * 60 * 1000,
-  keys: [cookieKey.key]
+  keys: [cookieKey]
 }));
 
 //**** Express Session

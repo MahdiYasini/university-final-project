@@ -13,9 +13,11 @@ const fs = require('fs');
 
 const moment = require('jalali-moment');
 
+const { telegram_api_token } = require('../config/securityKeys');
+const { Telegraf, Markup, Extra } = require('telegraf')
+const bot = new Telegraf(telegram_api_token)
 
 //! آخرین فعالیت کاربر درست کار نمیکنه بازنگری بفرما
-
 
 //********************* <<Functions>> *********************//
 const checkExistEmail = async (email) => {
@@ -130,18 +132,18 @@ router.get("/logout", (req, res) => {
 //********************* <<Handle Dashboard request >> *********************//
 router.get('/dashboard', (req, res) =>
   Post.find({}).populate(
-      'author', { userName: 1, description: 1, profileImage: 1 })
+    'author', { userName: 1, description: 1, profileImage: 1 })
     .then((posts) => {
       posts.forEach(post => {
         post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
       });
-          let checkExistPost = 0;
-          if (posts.length == 0) checkExistPost = 1;
-          res.render('dashboard', {
-            name: req.user.userName,
-            posts,
-            checkExistPost
-          });
+      let checkExistPost = 0;
+      if (posts.length == 0) checkExistPost = 1;
+      res.render('dashboard', {
+        name: req.user.userName,
+        posts,
+        checkExistPost
+      });
     })
     .catch(err => console.log(err))
 );
@@ -225,7 +227,7 @@ router.get("/myArticles", (req, res) => {
     if (posts.length == 0) checkExistPost = 1;
     posts.forEach(post => {
       post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
-    }); 
+    });
     res.render("myArticles", {
       posts,
       checkExistPost: checkExistPost
@@ -256,7 +258,7 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
     summery === "" ||
     article === ""
   ) {
-    fs.unlinkSync("./public/images/postImages/" + req.file.filename);
+    if(req.file) fs.unlinkSync("./public/images/postImages/" + req.file.filename);
     errors.push({
       msg: "لطفا اطلاعات قسمت‌هایی که با ستاره مشخص شده‌اند را کامل کنید"
     });
@@ -278,7 +280,7 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
     if (articleKeys) {
       let arrayOfArticleKeys;
       arrayOfArticleKeys = articleKeys.split(' ');
-      arrayOfArticleKeys = arrayOfArticleKeys.filter(function(str) {
+      arrayOfArticleKeys = arrayOfArticleKeys.filter(function (str) {
         return /\S/.test(str);
       });
       if (arrayOfArticleKeys.length) {
@@ -299,6 +301,26 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
         res.redirect("/dashboard");
       })
       .catch(err => console.log(err));
+    //? Check to share in telegram channel
+    if (req.body.shareToTelegramChannel) {
+      const keyboard = Markup.inlineKeyboard([
+        Markup.urlButton("بزن بریم", `https://www.zoomit.ir/`, 0),
+      ]);
+      bot.telegram.sendMessage(
+        '@SafarNameThePlaceForWriteAMemory',
+        `\n ________________________
+        ✈️✈️✈️✈️✈️\n 
+        ________________________
+          خاطره ای جدید منتشر شد \n 
+          ${moment(new Date(), 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')} \n 
+          ${newPost.subject}\n
+          ${newPost.summery}\n 
+          به قلم ${req.user.userName} \n
+          ________________________
+          \n✈️✈️✈️✈️✈️\n`,
+        Extra.markdown().markup(keyboard)
+      );
+    }
   }
 });
 //********************* //

@@ -323,7 +323,7 @@ router.get("/authorArticles/:id", (req, res) => {
           let checkExistsPosts = 0;
           if(posts.length == 0 ) checkExistsPosts = 1;
           res.render('authorArticles', {
-            advanceMenuBar: checkUser(userAccess),
+            advanceMenuBar: checkUser(req.user),
             checkExistsPosts,
             user,
             posts,

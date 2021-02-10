@@ -15,6 +15,9 @@ const moment = require('jalali-moment');
 
 const fs = require('fs');
 
+
+//
+let advanceMenuBar = "guests";
 //! last activty user dastan dare bayad dorost she
 //! menu bar ham dastan dare bayad dorost beshe
 //! baraye dashboaed like ro bezarim yane? 
@@ -22,6 +25,7 @@ const fs = require('fs');
 
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
+const { search } = require('../config/DB');
 //? For save profile image.
 let uploadProfileImage = multer({
   storage: multer.diskStorage({
@@ -97,6 +101,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
   if (errors.length > 0) {
     if( req.file) fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
     res.render("register", {
+      advanceMenuBar,
       errors,
       userName,
       email,
@@ -229,6 +234,7 @@ router.get("/article/:id", (req, res) => {
               let checkUserLoggedIn = 0;
               if(req.user) checkUserLoggedIn =1;
               res.render("article", {
+                advanceMenuBar,
                 post,
                 userLoggedIn,
                 comments,
@@ -291,11 +297,14 @@ router.get("/authorArticles/:id", (req, res) => {
       }
     }
   }
+
   postKey = postKey.join("");
-  User.findOne({
-    userName: postKey
-  })
+  console.log('postKey :>> ', postKey);
+  User.findOne(
+      { _id: postKey } 
+  )
     .then(user => {
+      console.log('user :>> ', user);
       Post.find({
         author: user._id
       })
@@ -304,7 +313,11 @@ router.get("/authorArticles/:id", (req, res) => {
           posts.forEach(post => {
             post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
           });
+          let checkExistsPosts = 0;
+          if(posts.length == 0 ) checkExistsPosts = 1;
           res.render('authorArticles', {
+            advanceMenuBar,
+            checkExistsPosts,
             user,
             posts,
           });
@@ -340,6 +353,7 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
       let checkExistPost = 0;
       if (posts.length == 0) checkExistPost = 1;
       res.render('postByArticleKeys', {
+        advanceMenuBar,
         postKey,
         posts,
         checkExistPost
@@ -406,6 +420,7 @@ router.get('/', function (req, res, next) {
         let checkExistPost = 0;
         if (posts.length == 0) checkExistPost = 1;
         res.render('mainPage', {
+          advanceMenuBar,
           posts,
           checkExistPost
         });
@@ -414,5 +429,38 @@ router.get('/', function (req, res, next) {
   }
 });
 //********************* //
+
+//********************* << search Handle >> *********************//
+router.post("/search", function(req, res, next) {
+  process.setMaxListeners(0);
+  console.log('req.body :>> ', req.body.searchField);
+  Post.find( { $or: [ { subject: req.body.searchField }, { article: req.body.searchField }, {summery: req.body.searchField} ] })
+    .then(posts => {
+      let checkExistPost = 0;
+      if (posts.length == 0) checkExistPost = 1;
+      res.render('searchResult', {
+        postKey:  req.body.searchField,
+        advanceMenuBar,
+        posts,
+        checkExistPost
+      });
+    })
+})
+
+//********************* << Admin Handle >> *********************//
+router.get("/adminLogin", (req, res) => {
+  res.render("adminLogin")
+})
+
+router.post("/adminLogin", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/admin",
+    failureRedirect: "/adminLogin",
+    failureFlash: true
+  })(req, res, next);
+});
+//********************* //
+
+
 
 module.exports = router;

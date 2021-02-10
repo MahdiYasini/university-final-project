@@ -61,7 +61,6 @@ let uploadProfileImage = multer({
 //********************* <<Handle Registering request >> *********************//
 //**** Register Page request
 router.get("/register", (req, res) => {
-  console.log('req.user :>> ', req.user);
   if (req.user) {
     res.redirect("dashboard");
   } else {
@@ -299,12 +298,10 @@ router.get("/authorArticles/:id", (req, res) => {
   }
 
   postKey = postKey.join("");
-  console.log('postKey :>> ', postKey);
   User.findOne(
       { _id: postKey } 
   )
     .then(user => {
-      console.log('user :>> ', user);
       Post.find({
         author: user._id
       })
@@ -330,7 +327,6 @@ router.get("/authorArticles/:id", (req, res) => {
 router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
   let postKey = [];
   let variable = 0;
-  console.log('req.path :>> ', req.path);
   for (let i = 0; req.path[i] != null; i++) {
     if (req.path[i] === "/") {
       variable++;
@@ -433,7 +429,6 @@ router.get('/', function (req, res, next) {
 //********************* << search Handle >> *********************//
 router.post("/search", function(req, res, next) {
   process.setMaxListeners(0);
-  console.log('req.body :>> ', req.body.searchField);
   Post.find( { $or: [ { subject: req.body.searchField }, { article: req.body.searchField }, {summery: req.body.searchField} ] })
     .then(posts => {
       let checkExistPost = 0;

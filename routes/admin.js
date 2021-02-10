@@ -85,7 +85,7 @@ router.get("/suspendAccount/:id", (req, res) => {
             user.suspend = true;
             user.save();
         })
-        .catch(err => console.log('err >> ', err))
+        .catch(err => console.log(err))
 
     req.flash("success_msg", "کاربر با موفیقیت معلق شد");
     res.redirect("/admin/allUsers");
@@ -107,7 +107,6 @@ router.get("/activatedAccount/:id", (req, res) => {
         }
     }
     userId = userId.join("");
-    console.log('userId :>> ', userId);
     User.findOne({
             _id: userId
         })
@@ -115,7 +114,7 @@ router.get("/activatedAccount/:id", (req, res) => {
             user.suspend = false;
             user.save();
         })
-        .catch(err => console.log('err >> ', err))
+        .catch(err => console.log(err))
     req.flash("success_msg", "کاربر با موفیقیت فعال شد");
     res.redirect("/admin/allUsers");
 
@@ -143,7 +142,7 @@ router.get("/deleteAccount/:id", (req, res) => {
         .then(deletedResult => {
             Post.findByIdAndDelete({author: userId})
         })
-        .catch(err => console.log('err :>> ', err))
+        .catch(err => console.log(err))
         req.flash("success_msg", "کاربر با موفیقیت حذف شد");
         res.redirect("/admin/allUsers");
 })
@@ -170,7 +169,7 @@ router.get("/deleteAccount/:id", (req, res) => {
         .then(deletedResult => {
             Post.findByIdAndDelete({author: userId})
         })
-        .catch(err => console.log('err :>> ', err))
+        .catch(err => console.log(err))
         req.flash("success_msg", "کاربر با موفیقیت حذف شد");
         res.redirect("/admin/allUsers");
 })
@@ -197,7 +196,7 @@ router.get("/deletePost/:id", (req, res) => {
         .then(deletedResult => {
             Post.findByIdAndDelete({author: userId})
         })
-        .catch(err => console.log('err :>> ', err))
+        .catch(err => console.log(err))
         req.flash("success_msg", "خاطره با موفیقیت حذف شد");
         res.redirect("/admin");
 })

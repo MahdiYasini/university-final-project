@@ -19,7 +19,6 @@ const bot = new Telegraf(telegram_api_token)
 
 //
 let advanceMenuBar = "users";
-//! آخرین فعالیت کاربر درست کار نمیکنه بازنگری بفرما
 
 //********************* <<Functions>> *********************//
 const checkExistEmail = async (email) => {

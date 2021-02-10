@@ -28,10 +28,6 @@ const checkUser =(userAccess) =>{
   return advanceMenuBar;
 }
 
-//! last activty user dastan dare bayad dorost she
-//! menu bar ham dastan dare bayad dorost beshe
-//! baraye dashboaed like ro bezarim yane? 
-
 
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");

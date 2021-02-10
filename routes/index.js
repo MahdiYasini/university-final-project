@@ -426,7 +426,7 @@ router.get('/', function (req, res, next) {
         let checkExistPost = 0;
         if (posts.length == 0) checkExistPost = 1;
         res.render('mainPage', {
-          advanceMenuBar: checkUser(userAccess),
+          advanceMenuBar: checkUser(req.user),
           posts,
           checkExistPost
         });

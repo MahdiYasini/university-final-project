@@ -1,0 +1,42 @@
+<% if(advanceMenuBar == "guests") { %>
+    <ul class="navbar-nav mr-auto p-0">
+        <li class="nav-item">
+            <button type="button" class="btn nav-link p-1 m-auto" data-toggle="modal" data-target="#search">
+                جستجو
+            </button>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link p-1" href="/login">ورود</a>
+        </li>
+    </ul>
+<% } else if (advanceMenuBar == "users") { %>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/addArticle">افزودن خاطره</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/myArticles">خاطره‌های من</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link" href="/editProfile">ویرایش اطلاعات</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link active" href="/dashboard">سفرنامه</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
+        </li>
+    </ul>
+<% } else if (advanceMenuBar == "admin") { %>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/allUsers">کاربران</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link active" href="/admin">خاطرات</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
+        </li>
+    </ul>
+<% } %>

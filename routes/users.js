@@ -17,6 +17,8 @@ const { telegram_api_token } = require('../config/securityKeys');
 const { Telegraf, Markup, Extra } = require('telegraf')
 const bot = new Telegraf(telegram_api_token)
 
+//
+let advanceMenuBar = "users";
 //! آخرین فعالیت کاربر درست کار نمیکنه بازنگری بفرما
 
 //********************* <<Functions>> *********************//
@@ -130,7 +132,14 @@ router.get("/logout", (req, res) => {
 //********************* //
 
 //********************* <<Handle Dashboard request >> *********************//
-router.get('/dashboard', (req, res) =>
+router.get('/dashboard', (req, res) =>{
+  if(req.user.suspend === true) {
+    req.logout();
+    req.flash("error_msg", "طبق دستور کارگروه تا اطلاع ثانوی حساب کاربری شما معلق شده است");
+    res.clearCookie("session");
+    res.redirect("/");
+  }
+
   Post.find({}).populate(
     'author', { userName: 1, description: 1, profileImage: 1 })
     .then((posts) => {
@@ -140,19 +149,21 @@ router.get('/dashboard', (req, res) =>
       let checkExistPost = 0;
       if (posts.length == 0) checkExistPost = 1;
       res.render('dashboard', {
+        advanceMenuBar,
         name: req.user.userName,
         posts,
         checkExistPost
       });
     })
     .catch(err => console.log(err))
-);
+  });
 //********************* //
 
 //********************* <<Handle Dashboard request >> *********************//
 //**** Edit profile page request
 router.get('/editProfile', (req, res) => {
   res.render("editProfile", {
+    advanceMenuBar,
     userInformation: req.user
   });
 });
@@ -229,6 +240,7 @@ router.get("/myArticles", (req, res) => {
       post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
     });
     res.render("myArticles", {
+      advanceMenuBar,
       posts,
       checkExistPost: checkExistPost
     });
@@ -239,7 +251,9 @@ router.get("/myArticles", (req, res) => {
 //********************* << Add Article Handle >> *********************//
 //**** Add Article Page request
 router.get("/addArticle", (req, res) => {
-  res.render("addArticle");
+  res.render("addArticle", {
+    advanceMenuBar
+  });
 });
 
 //**** Add Article request handle
@@ -263,6 +277,7 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
       msg: "لطفا اطلاعات قسمت‌هایی که با ستاره مشخص شده‌اند را کامل کنید"
     });
     res.render("addArticle", {
+      advanceMenuBar,
       errors,
       subject,
       summery,
@@ -325,7 +340,7 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
 });
 //********************* //
 
-//********************* << 404 Handle >> *********************//
+// //********************* << 404 Handle >> *********************//
 router.get('*', function(req, res){
     res.status(404).render('404Page');
 });

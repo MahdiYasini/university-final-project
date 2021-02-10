@@ -58,7 +58,7 @@ router.get('/allUsers', (req, res) =>
         });
     })
     .catch(err => console.log(err))
-    
+
 );
 //********************* //
 
@@ -136,15 +136,17 @@ router.get("/deleteAccount/:id", (req, res) => {
         }
     }
     userId = userId.join("");
-    User.findOneAndDelete({
-            _id: userId
+    Post.deleteMany({
+            author: userId
         })
-        .then(deletedResult => {
-            Post.findByIdAndDelete({author: userId})
+        .then(() => {
+            User.findOneAndDelete({
+                _id: userId
+            })
         })
         .catch(err => console.log(err))
-        req.flash("success_msg", "کاربر با موفیقیت حذف شد");
-        res.redirect("/admin/allUsers");
+    req.flash("success_msg", "کاربر با موفیقیت حذف شد");
+    res.redirect("/admin/allUsers");
 })
 //********************* //
 
@@ -167,11 +169,13 @@ router.get("/deleteAccount/:id", (req, res) => {
             _id: userId
         })
         .then(deletedResult => {
-            Post.findByIdAndDelete({author: userId})
+            Post.findByIdAndDelete({
+                author: userId
+            })
         })
         .catch(err => console.log(err))
-        req.flash("success_msg", "کاربر با موفیقیت حذف شد");
-        res.redirect("/admin/allUsers");
+    req.flash("success_msg", "کاربر با موفیقیت حذف شد");
+    res.redirect("/admin/allUsers");
 })
 //********************* //
 
@@ -194,11 +198,13 @@ router.get("/deletePost/:id", (req, res) => {
             _id: userId
         })
         .then(deletedResult => {
-            Post.findByIdAndDelete({author: userId})
+            Post.findByIdAndDelete({
+                author: userId
+            })
         })
         .catch(err => console.log(err))
-        req.flash("success_msg", "خاطره با موفیقیت حذف شد");
-        res.redirect("/admin");
+    req.flash("success_msg", "خاطره با موفیقیت حذف شد");
+    res.redirect("/admin");
 })
 //********************* //
 module.exports = router;

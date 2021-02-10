@@ -21,23 +21,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/addArticle">افزودن خاطره</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/myArticles">خاطره‌های من</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="/editProfile">ویرایش اطلاعات</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="/dashboard">سفرنامه</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
+                <% include ./partials/menuBar %>
             </div>
         </nav>
         <% include ./partials/messages %>
@@ -52,6 +36,13 @@
                 آخرین فعالیت: <%= lastActivity  %>   
             </div>
           </div>
+          <% if(checkExistsPosts) { %>
+            <div class="mt-5">
+                <div class="col-sm-8 mx-auto text-center">
+                    <h4> هیچ خاطره‌ای برای نمایش وجود ندارد&nbsp;&nbsp; <span>:(</span> </h4>
+                </div>
+            </div>
+            <% } else { %>
           
             <% for(var post in posts){ %>
             <div class="mt-5 card ">
@@ -94,6 +85,7 @@
                 </div>
             </div>
             <% } %>
+        <% } %>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">

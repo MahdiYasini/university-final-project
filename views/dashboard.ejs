@@ -21,25 +21,8 @@
                 aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/addArticle">افزودن خاطره</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/myArticles">خاطره‌های من</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="/editProfile">ویرایش اطلاعات</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="/dashboard">سفرنامه</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
+                <% include ./partials/menuBar %>
             </div>
         </nav>
 
@@ -88,7 +71,7 @@
                         <img src="<%= posts[post]['author'].profileImage %>" class="rounded-circle w-25 p-3"
                             alt="Cinque Terre"/>
                         <p class="col-6 text-right m-1">
-                            <a class="nav-link" href="/authorArticles/<%= posts[post]['author'].userName%>">
+                            <a class="nav-link" href="/authorArticles/<%= posts[post]['author']._id%>">
                                 <%= posts[post]['author'].userName%>
                             </a>
                         </p>

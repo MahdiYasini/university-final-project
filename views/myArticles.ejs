@@ -23,20 +23,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/addArticle">افزودن خاطره</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="/editProfile">ویرایش اطلاعات</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="/dashboard">سفرنامه</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
+                <% include ./partials/menuBar %>
             </div>
         </nav>
         <% include ./partials/messages %>

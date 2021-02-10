@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
         type : Date, 
         default: Date.now
     },
+    suspend: {
+        type: Boolean,
+        default: false
+    }
 },
 {
     timestamps: true

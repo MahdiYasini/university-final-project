@@ -359,7 +359,7 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
       let checkExistPost = 0;
       if (posts.length == 0) checkExistPost = 1;
       res.render('postByArticleKeys', {
-        advanceMenuBar: checkUser(userAccess),
+        advanceMenuBar: checkUser(req.user),
         postKey,
         posts,
         checkExistPost

@@ -17,7 +17,17 @@ const fs = require('fs');
 
 
 //
-let advanceMenuBar = "guests";
+const checkUser =(userAccess) =>{
+  let advanceMenuBar = "guests";
+  if(userAccess){
+    advanceMenuBar = "users";
+  }
+  if(userAccess && userAccess.userName === "Administrator") {
+    advanceMenuBar = "admin";
+  }
+  return advanceMenuBar;
+}
+
 //! last activty user dastan dare bayad dorost she
 //! menu bar ham dastan dare bayad dorost beshe
 //! baraye dashboaed like ro bezarim yane? 
@@ -233,7 +243,7 @@ router.get("/article/:id", (req, res) => {
               let checkUserLoggedIn = 0;
               if(req.user) checkUserLoggedIn =1;
               res.render("article", {
-                advanceMenuBar,
+                advanceMenuBar: checkUser(req.user),
                 post,
                 userLoggedIn,
                 comments,
@@ -313,7 +323,7 @@ router.get("/authorArticles/:id", (req, res) => {
           let checkExistsPosts = 0;
           if(posts.length == 0 ) checkExistsPosts = 1;
           res.render('authorArticles', {
-            advanceMenuBar,
+            advanceMenuBar: checkUser(userAccess),
             checkExistsPosts,
             user,
             posts,
@@ -349,7 +359,7 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
       let checkExistPost = 0;
       if (posts.length == 0) checkExistPost = 1;
       res.render('postByArticleKeys', {
-        advanceMenuBar,
+        advanceMenuBar: checkUser(userAccess),
         postKey,
         posts,
         checkExistPost
@@ -416,7 +426,7 @@ router.get('/', function (req, res, next) {
         let checkExistPost = 0;
         if (posts.length == 0) checkExistPost = 1;
         res.render('mainPage', {
-          advanceMenuBar,
+          advanceMenuBar: checkUser(userAccess),
           posts,
           checkExistPost
         });
@@ -435,7 +445,7 @@ router.post("/search", function(req, res, next) {
       if (posts.length == 0) checkExistPost = 1;
       res.render('searchResult', {
         postKey:  req.body.searchField,
-        advanceMenuBar,
+        advanceMenuBar: checkUser(userAccess),
         posts,
         checkExistPost
       });

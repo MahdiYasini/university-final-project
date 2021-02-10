@@ -13,11 +13,12 @@ const {cookieKey} = require('./config/securityKeys');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
 const passport = require('passport');
-const { ensureAuthenticated } = require('./config/auth');
+const { ensureAuthenticated, ensureAdminAuthenticated } = require('./config/auth');
 
 
 //********************* << For support persian (farsi) routing>> *********************//
@@ -101,6 +102,7 @@ app.use((req, res, next) => {
 
 //********************* <<Routes>> *********************//
 app.use('/', indexRouter);
+app.use('/admin',ensureAdminAuthenticated, adminRouter);
 app.use('/',ensureAuthenticated, usersRouter);
 //********************* //
 

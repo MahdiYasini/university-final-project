@@ -325,4 +325,10 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
 });
 //********************* //
 
+//********************* << 404 Handle >> *********************//
+router.get('*', function(req, res){
+    res.status(404).render('404Page');
+});
+
+
 module.exports = router;

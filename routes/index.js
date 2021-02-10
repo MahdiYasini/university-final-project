@@ -95,7 +95,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
   }
   //? Check any error exist or not.
   if (errors.length > 0) {
-    fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
+    if( req.file) fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
     res.render("register", {
       errors,
       userName,

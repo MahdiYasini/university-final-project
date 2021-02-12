@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "Yekan";
+  src: url("./font/Yekan.eot"),
+    url("./font/Yekan.TTF") format("truetype"),
+    url("./font/Yekan.woff") format('woff');
+}
+
+body {
+  font-family: 'Yekan';
+}

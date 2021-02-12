@@ -288,7 +288,6 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
       subject,
       summery,
       article,
-      articleKeys
     });
     //? If user wrote articleKeys 
     if (articleKeys) {

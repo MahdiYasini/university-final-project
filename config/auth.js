@@ -10,8 +10,8 @@ module.exports = {
         if(req.isAuthenticated() && req.user.userName === "Administrator") {
             return next();
         }
-        req.flash('error_msg', 'لطفا وارد شوید');
-        res.redirect('/login');
+        req.flash('error_msg', 'رمز یا نام کاربری اشتباه است');
+        res.redirect('/adminLogin');
     }
 
 };

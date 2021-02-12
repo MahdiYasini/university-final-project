@@ -17,8 +17,15 @@ const { telegram_api_token } = require('../config/securityKeys');
 const { Telegraf, Markup, Extra } = require('telegraf')
 const bot = new Telegraf(telegram_api_token)
 
-//
-let advanceMenuBar = "users";
+// setup menubar
+const checkUser =(userAccess) =>{
+  let advanceMenuBar = "users";
+  if(userAccess.userName === "Administrator") {
+    advanceMenuBar = "admin";
+  }
+  return advanceMenuBar;
+}
+
 
 //********************* <<Functions>> *********************//
 const checkExistEmail = async (email) => {
@@ -148,7 +155,7 @@ router.get('/dashboard', (req, res) =>{
       let checkExistPost = 0;
       if (posts.length == 0) checkExistPost = 1;
       res.render('dashboard', {
-        advanceMenuBar,
+        advanceMenuBar: checkUser(req.user),
         name: req.user.userName,
         posts,
         checkExistPost
@@ -162,7 +169,7 @@ router.get('/dashboard', (req, res) =>{
 //**** Edit profile page request
 router.get('/editProfile', (req, res) => {
   res.render("editProfile", {
-    advanceMenuBar,
+    advanceMenuBar: checkUser(req.user),
     userInformation: req.user
   });
 });
@@ -239,7 +246,7 @@ router.get("/myArticles", (req, res) => {
       post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
     });
     res.render("myArticles", {
-      advanceMenuBar,
+      advanceMenuBar: checkUser(req.user),
       posts,
       checkExistPost: checkExistPost
     });
@@ -251,7 +258,7 @@ router.get("/myArticles", (req, res) => {
 //**** Add Article Page request
 router.get("/addArticle", (req, res) => {
   res.render("addArticle", {
-    advanceMenuBar
+    advanceMenuBar: checkUser(req.user),
   });
 });
 
@@ -276,7 +283,7 @@ router.post("/addArticle", uploadArticleImage.single("postImage"), (req, res) =>
       msg: "لطفا اطلاعات قسمت‌هایی که با ستاره مشخص شده‌اند را کامل کنید"
     });
     res.render("addArticle", {
-      advanceMenuBar,
+      advanceMenuBar: checkUser(req.user),
       errors,
       subject,
       summery,

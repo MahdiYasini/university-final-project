@@ -16,7 +16,7 @@ const moment = require('jalali-moment');
 const fs = require('fs');
 
 
-//
+// setup menubar
 const checkUser =(userAccess) =>{
   let advanceMenuBar = "guests";
   if(userAccess){
@@ -436,12 +436,14 @@ router.get('/', function (req, res, next) {
 router.post("/search", function(req, res, next) {
   process.setMaxListeners(0);
   Post.find( { $or: [ { subject: req.body.searchField }, { article: req.body.searchField }, {summery: req.body.searchField} ] })
+  .populate(
+    'author', { userName: 1, description: 1, profileImage: 1 })
     .then(posts => {
       let checkExistPost = 0;
       if (posts.length == 0) checkExistPost = 1;
       res.render('searchResult', {
         postKey:  req.body.searchField,
-        advanceMenuBar: checkUser(userAccess),
+        advanceMenuBar: checkUser(req.user),
         posts,
         checkExistPost
       });

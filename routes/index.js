@@ -17,12 +17,12 @@ const fs = require('fs');
 
 
 // setup menubar
-const checkUser =(userAccess) =>{
+const checkUser = (userAccess) => {
   let advanceMenuBar = "guests";
-  if(userAccess){
+  if (userAccess) {
     advanceMenuBar = "users";
   }
-  if(userAccess && userAccess.userName === "Administrator") {
+  if (userAccess && userAccess.userName === "Administrator") {
     advanceMenuBar = "admin";
   }
   return advanceMenuBar;
@@ -31,7 +31,9 @@ const checkUser =(userAccess) =>{
 
 //********************* <<Setup Multer for save file in local storage>> *********************//
 const multer = require("multer");
-const { search } = require('../config/DB');
+const {
+  search
+} = require('../config/DB');
 //? For save profile image.
 let uploadProfileImage = multer({
   storage: multer.diskStorage({
@@ -104,7 +106,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
   }
   //? Check any error exist or not.
   if (errors.length > 0) {
-    if( req.file) fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
+    if (req.file) fs.unlinkSync("./public/images/profileImages/" + req.file.filename);
     res.render("register", {
       advanceMenuBar,
       errors,
@@ -113,8 +115,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
       password,
       password2
     });
-  }
-  else {
+  } else {
     //! We have to use else because solve the error of the below  
     //? Cannot set headers after they are sent to the client
     //? Validation for existence user 
@@ -189,8 +190,7 @@ router.post("/register", uploadProfileImage.single("profilePicture"), (req, res,
 router.get("/login", (req, res) => {
   if (req.user) {
     res.redirect('dashboard')
-  }
-  else res.render("login");
+  } else res.render("login");
 });
 
 //**** Login request handle
@@ -219,25 +219,25 @@ router.get("/article/:id", (req, res) => {
   }
   postKey = postKey.join("");
   Post.findOne({
-    _id: postKey
-  })
+      _id: postKey
+    })
     .then(post => {
       Like.findOne({
-        post: postKey
-      })
+          post: postKey
+        })
         .then(postLikes => {
           post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
           let userLoggedIn = 0;
           if (req.user) userLoggedIn = 1;
           Comment.find({
-            post: postKey
-          })
+              post: postKey
+            })
             .then((comments) => {
               if (postLikes == null) postLikes = 0;
               else postLikes = postLikes.counted;
-              
+
               let checkUserLoggedIn = 0;
-              if(req.user) checkUserLoggedIn =1;
+              if (req.user) checkUserLoggedIn = 1;
               res.render("article", {
                 advanceMenuBar: checkUser(req.user),
                 post,
@@ -259,8 +259,7 @@ router.post("/addComment", (req, res, next) => {
   if (req.body.comment == '') {
     req.flash("error_msg", "لطفا نظرت رو بنویس");
     res.redirect("/article/" + req.body.postId);
-  }
-  else {
+  } else {
     const newComment = new Comment({
       comment: req.body.comment,
       post: req.body.postId
@@ -268,13 +267,11 @@ router.post("/addComment", (req, res, next) => {
     if (req.user) {
       newComment.userName = req.user.userName;
       flag = 1;
-    }
-    else {
+    } else {
       if (req.body.userName == '') {
         req.flash("error_msg", "لطفا اسمت رو بنویس");
         res.redirect("/article/" + req.body.postId);
-      }
-      else {
+      } else {
         newComment.userName = req.body.userName;
         flag = 1;
       }
@@ -304,20 +301,20 @@ router.get("/authorArticles/:id", (req, res) => {
   }
 
   postKey = postKey.join("");
-  User.findOne(
-      { _id: postKey } 
-  )
+  User.findOne({
+      _id: postKey
+    })
     .then(user => {
       Post.find({
-        author: user._id
-      })
+          author: user._id
+        })
         .then(posts => {
           lastActivity = moment(user.updatedAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
           posts.forEach(post => {
             post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
           });
           let checkExistsPosts = 0;
-          if(posts.length == 0 ) checkExistsPosts = 1;
+          if (posts.length == 0) checkExistsPosts = 1;
           res.render('authorArticles', {
             advanceMenuBar: checkUser(req.user),
             checkExistsPosts,
@@ -345,9 +342,15 @@ router.get("/articlesBy/:word(([\\u0600-\\u06FF]+\\s?)+$)", (req, res) => {
   }
   postKey = postKey.join("");
   Post.find({
-    articleKeys: { "$in": [postKey] }
-  }).populate(
-    'author', { userName: 1, description: 1, profileImage: 1 })
+      articleKeys: {
+        "$in": [postKey]
+      }
+    }).populate(
+      'author', {
+        userName: 1,
+        description: 1,
+        profileImage: 1
+      })
     .then(posts => {
       posts.forEach(post => {
         post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
@@ -380,8 +383,8 @@ router.post("/addLike/:id", (req, res) => {
   }
   postKey = postKey.join("");
   Like.findOne({
-    post: postKey
-  })
+      post: postKey
+    })
     .then(likeInformation => {
       if (!likeInformation) {
         const newLikeInformation = new Like({
@@ -391,13 +394,11 @@ router.post("/addLike/:id", (req, res) => {
         });
         req.flash("success_msg", "شما این خاطره را پسندیدی");
         newLikeInformation.save();
-      }
-      else {
+      } else {
         const checkUserLikedPost = likeInformation.users.find(element => element == req.user.id);
         if (checkUserLikedPost) {
           req.flash("error_msg", "قبلا این خاطره را پسندیدی");
-        }
-        else {
+        } else {
           req.flash("success_msg", "شما این خاطره را پسندیدی");
           likeInformation.users.push(req.user._id)
           likeInformation.counted = likeInformation.counted + 1;
@@ -414,7 +415,11 @@ router.get('/', function (req, res, next) {
   if (req.user) res.redirect('dashboard');
   else {
     Post.find({}).populate(
-      'author', { userName: 1, description: 1, profileImage: 1 })
+        'author', {
+          userName: 1,
+          description: 1,
+          profileImage: 1
+        })
       .then((posts) => {
         posts.forEach(post => {
           post["time"] = moment(post.createdAt, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
@@ -433,21 +438,45 @@ router.get('/', function (req, res, next) {
 //********************* //
 
 //********************* << search Handle >> *********************//
-router.post("/search", function(req, res, next) {
+router.post("/search", function (req, res, next) {
   process.setMaxListeners(0);
-  Post.find( { $or: [ { subject: req.body.searchField }, { article: req.body.searchField }, {summery: req.body.searchField} ] })
+  let replace = req.body.searchField;
+  console.log('replace :>> ', replace);
+  let searchString = new RegExp(replace);
+  Post.find({
+    $or: [{
+      "subject": {
+        $regex: searchString,
+        $options: 'i'
+      }
+    }, {
+      "article": {
+        $regex: searchString,
+        $options: 'i'
+      }
+    }, {
+      "summery": {
+        $regex: searchString,
+        $options: 'i'
+      }
+    }]
+  })
   .populate(
-    'author', { userName: 1, description: 1, profileImage: 1 })
-    .then(posts => {
-      let checkExistPost = 0;
-      if (posts.length == 0) checkExistPost = 1;
-      res.render('searchResult', {
-        postKey:  req.body.searchField,
-        advanceMenuBar: checkUser(req.user),
-        posts,
-        checkExistPost
-      });
+    'author', {
+      userName: 1,
+      description: 1,
+      profileImage: 1
     })
+  .then(posts => {
+    let checkExistPost = 0;
+    if (posts.length == 0) checkExistPost = 1;
+    res.render('searchResult', {
+      postKey: req.body.searchField,
+      advanceMenuBar: checkUser(req.user),
+      posts,
+      checkExistPost
+    });
+  });
 })
 
 //********************* << Admin Handle >> *********************//
@@ -463,7 +492,4 @@ router.post("/adminLogin", (req, res, next) => {
   })(req, res, next);
 });
 //********************* //
-
-
-
 module.exports = router;

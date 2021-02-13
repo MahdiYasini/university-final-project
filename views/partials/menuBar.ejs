@@ -8,9 +8,16 @@
         <li class="nav-item">
             <a class="nav-link p-1" href="/login">ورود</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link p-1" href="/">سفرنامه</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link p-1" href="/register">ثبت نام</a>
+        </li>
     </ul>
+    <% include ./modals %>
 <% } else if (advanceMenuBar == "users") { %>
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto h5">
         <li class="nav-item">
             <a class="nav-link" href="/addArticle">افزودن خاطره</a>
         </li>
@@ -24,9 +31,15 @@
             <a class="nav-link active" href="/dashboard">سفرنامه</a>
         </li>
         <li class="nav-item">
+            <button type="button" class="btn nav-link " data-toggle="modal" data-target="#search">
+                جستجو
+            </button>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="/logout">خروج<span class="sr-only">(current)</span></a>
         </li>
     </ul>
+    <% include ./modals %>
 <% } else if (advanceMenuBar == "admin") { %>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">

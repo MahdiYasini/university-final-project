@@ -441,7 +441,6 @@ router.get('/', function (req, res, next) {
 router.post("/search", function (req, res, next) {
   process.setMaxListeners(0);
   let replace = req.body.searchField;
-  console.log('replace :>> ', replace);
   let searchString = new RegExp(replace);
   Post.find({
     $or: [{
